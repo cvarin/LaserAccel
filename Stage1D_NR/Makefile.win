@@ -1,0 +1,57 @@
+# Project: accel_1D
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = main.o rkqs_double.o initialize.o notes.o nrutil.o odeint_double.o rkck_double.o pzextr_double.o bsstep_double.o mmid_double.o $(RES)
+LINKOBJ  = main.o rkqs_double.o initialize.o notes.o nrutil.o odeint_double.o rkck_double.o pzextr_double.o bsstep_double.o mmid_double.o $(RES)
+LIBS =   
+INCS = 
+CXXINCS = 
+BIN  = Stage1D.exe
+CXXFLAGS = $(CXXINCS) -ansi   -traditional-cpp -fexpensive-optimizations -O3
+CFLAGS = $(INCS) -ansi   -traditional-cpp -fexpensive-optimizations -O3
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before Stage1D.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "Stage1D.exe" $(LIBS)
+
+main.o: main.c
+	$(CPP) -c main.c -o main.o $(CXXFLAGS)
+
+rkqs_double.o: rkqs_double.c
+	$(CPP) -c rkqs_double.c -o rkqs_double.o $(CXXFLAGS)
+
+initialize.o: initialize.c
+	$(CPP) -c initialize.c -o initialize.o $(CXXFLAGS)
+
+notes.o: notes.c
+	$(CPP) -c notes.c -o notes.o $(CXXFLAGS)
+
+nrutil.o: nrutil.c
+	$(CPP) -c nrutil.c -o nrutil.o $(CXXFLAGS)
+
+odeint_double.o: odeint_double.c
+	$(CPP) -c odeint_double.c -o odeint_double.o $(CXXFLAGS)
+
+rkck_double.o: rkck_double.c
+	$(CPP) -c rkck_double.c -o rkck_double.o $(CXXFLAGS)
+
+pzextr_double.o: pzextr_double.c
+	$(CPP) -c pzextr_double.c -o pzextr_double.o $(CXXFLAGS)
+
+bsstep_double.o: bsstep_double.c
+	$(CPP) -c bsstep_double.c -o bsstep_double.o $(CXXFLAGS)
+
+mmid_double.o: mmid_double.c
+	$(CPP) -c mmid_double.c -o mmid_double.o $(CXXFLAGS)
