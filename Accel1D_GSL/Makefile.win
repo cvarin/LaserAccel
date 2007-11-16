@@ -1,0 +1,39 @@
+# Project: SODE1D
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = Main.o SODE1D.o WriteTo.o Gnuplot_i.o $(RES)
+LINKOBJ  = Main.o SODE1D.o WriteTo.o Gnuplot_i.o $(RES)
+LIBS =  ../../../../cygwin/lib/libgsl.a ../../../../cygwin/lib/libgslcblas.a  
+INCS = 
+CXXINCS = 
+BIN  = GSLODE.exe
+CXXFLAGS = $(CXXINCS)   -fexpensive-optimizations -O2
+CFLAGS = $(INCS)   -fexpensive-optimizations -O2
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before GSLODE.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "GSLODE.exe" $(LIBS)
+
+Main.o: Main.cpp
+	$(CPP) -c Main.cpp -o Main.o $(CXXFLAGS)
+
+SODE1D.o: SODE1D.cpp
+	$(CPP) -c SODE1D.cpp -o SODE1D.o $(CXXFLAGS)
+
+WriteTo.o: WriteTo.cpp
+	$(CPP) -c WriteTo.cpp -o WriteTo.o $(CXXFLAGS)
+
+Gnuplot_i.o: Gnuplot_i.cpp
+	$(CPP) -c Gnuplot_i.cpp -o Gnuplot_i.o $(CXXFLAGS)
