@@ -1,7 +1,7 @@
 [Project]
 FileName=GSLODE.dev
 Name=SODE1D
-UnitCount=9
+UnitCount=8
 Type=1
 Ver=1
 ObjFiles=
@@ -121,16 +121,6 @@ BuildCmd=
 FileName=Gnuplot_i.cpp
 CompileCpp=1
 Folder=Project1
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit9]
-FileName=Structures.hpp
-CompileCpp=1
-Folder=SODE1D
 Compile=1
 Link=1
 Priority=1000
