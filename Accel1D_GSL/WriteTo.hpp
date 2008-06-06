@@ -1,6 +1,6 @@
-#ifndef INC_WriteTo_hpp
-#define INC_WriteTo_hpp
+using namespace std;
 
-void WriteToGnuplot(Motion traj, int count);
+void WriteToFile(vector<double> time, vector<double> pos,
+     vector<double> vel, int count);
 
-#endif // INC_WriteTo_hpp
+void WriteToGnuplot(void* trajectory, int count);

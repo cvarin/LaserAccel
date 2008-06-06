@@ -5,8 +5,8 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = Main.o SODE1D.o WriteTo.o Gnuplot_i.o $(RES)
-LINKOBJ  = Main.o SODE1D.o WriteTo.o Gnuplot_i.o $(RES)
+OBJ  = Main.o SODE1D.o WriteTo.o Gnuplot_i.o INIsim.o $(RES)
+LINKOBJ  = Main.o SODE1D.o WriteTo.o Gnuplot_i.o INIsim.o $(RES)
 LIBS =  ../../../../cygwin/lib/libgsl.a ../../../../cygwin/lib/libgslcblas.a  
 INCS = 
 CXXINCS = 
@@ -37,3 +37,6 @@ WriteTo.o: WriteTo.cpp
 
 Gnuplot_i.o: Gnuplot_i.cpp
 	$(CPP) -c Gnuplot_i.cpp -o Gnuplot_i.o $(CXXFLAGS)
+
+INIsim.o: INIsim.cpp
+	$(CPP) -c INIsim.cpp -o INIsim.o $(CXXFLAGS)

@@ -4,19 +4,41 @@
 
 #include "PhysConsts.hpp"
 #include "Gnuplot_i.hpp"
-#include "SODE1D.hpp"
+#include "Structures.hpp"
 
-void WriteToGnuplot(Motion traj, int count)
-{
-    Gnuplot Plot;
+using namespace std;
 
-    Plot.set_style("lines");
-    Plot.set_xlabel("Temps");
-    Plot.set_ylabel("Amplitude");
-    Plot.plot_xy(traj.time,traj.position,"Position");
-    Plot.plot_xy(traj.time,traj.velocity,"Vitesse");
-    
-    std::cout << "Press [ENTER] or [CTRL-C] to quit." << std::endl;
-    std::getchar();
+void WriteToFile(vector<double> time,vector<double> pos,
+     vector<double> vel,int count){      
+     
+     ofstream OutFile("Solution.dat", ios::out);
+           
+     for(int i=0 ; i<=count ; i++){
+          OutFile << time[i] << "\t" 
+                  << pos[i]  << "\t" 
+                  << vel[i]  << "\n";
+          }
+          
+     OutFile.close();
 }
+
+void WriteToGnuplot(void* trajectory,int count){
+     
+     Gnuplot Plot;
+     motion* PtoTraj = (motion*)trajectory;//Typecast from void* to motion*
+     
+     vector<double> TempTime = PtoTraj->time;
+     vector<double> TempPosition = PtoTraj->position;
+     vector<double> TempVelocity = PtoTraj->velocity;
+
+     Plot.set_style("lines");
+     Plot.set_xlabel("Temps");
+     Plot.set_ylabel("Amplitude");
+     Plot.plot_xy(TempTime,TempPosition,"Position");
+     Plot.plot_xy(TempTime,TempVelocity,"Vitesse");
+    
+     cout << "Press [ENTER] or [CTRL-C] to quit." << endl;
+     getchar();
+     
+     }
 
