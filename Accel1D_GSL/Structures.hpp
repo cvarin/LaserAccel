@@ -1,13 +1,18 @@
-#include <vector>
+#ifndef _INCLUDE_Structures_hpp
+#define _INCLUDE_Structures_hpp
 
-using namespace std;
+#include<vector>
              
-struct motion{
-       vector<double> time;
-       vector<double> position;
-       vector<double> velocity; 
-       };
+struct motion
+{
+   std::vector<double> time;
+   std::vector<double> position;
+   std::vector<double> velocity; 
+};
         
-struct parameters{
-             double mu;
-             };
+struct parameters
+{
+   double mu;
+};
+
+#endif // End of file

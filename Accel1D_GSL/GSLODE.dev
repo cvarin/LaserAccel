@@ -1,7 +1,7 @@
 [Project]
 FileName=GSLODE.dev
 Name=SODE1D
-UnitCount=12
+UnitCount=13
 Type=1
 Ver=1
 ObjFiles=
@@ -162,6 +162,16 @@ FileName=ModelParams.ini
 Folder=SODE1D
 Compile=0
 Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit13]
+FileName=Constants.hpp
+CompileCpp=1
+Folder=SODE1D
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=

@@ -1,4 +1,8 @@
+#ifndef _INCLUDE_INIsim_hpp
+#define _INCLUDE_INIsim_hpp
 
-using namespace std;
+#include"Structures.hpp"
 
-void GetParams(void* params);
+void GetParams(parameters *params);
+
+#endif // End of file
