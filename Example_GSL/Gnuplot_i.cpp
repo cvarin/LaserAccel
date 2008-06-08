@@ -17,8 +17,6 @@
 //
 ////////////////////////////////////////////
 
-
-
 #include "gnuplot_i.hpp"
 #define PATH_MAXNAMESZ       4096
 
@@ -60,9 +58,8 @@ stringtok (Container &container, string const &in,
     }
 }
 
-//
+/******************************************************************************/
 // Constructors
-//
 Gnuplot::Gnuplot(void)
 {
     if (getenv("DISPLAY") == NULL)
@@ -88,6 +85,7 @@ Gnuplot::Gnuplot(void)
     this->valid = true;
 }
 
+/******************************************************************************/
 Gnuplot::Gnuplot(const string &style)
 {
     if (getenv("DISPLAY") == NULL)
@@ -112,6 +110,7 @@ Gnuplot::Gnuplot(const string &style)
     this->valid = true;
 }
 
+/******************************************************************************/
 Gnuplot::Gnuplot(
          const string &title,
          const string &style,
@@ -139,15 +138,12 @@ Gnuplot::Gnuplot(
     this->nplots = 0;
     this->valid = true;
 
-
     if (x.size() == 0 || y.size() == 0)
         throw GnuplotException("vectors too small");
-
     if (style == "")
         this->set_style("lines");
     else
         this->set_style(style);
-
     if (labelx == "")
         this->set_xlabel("X");
     else
@@ -163,6 +159,7 @@ Gnuplot::Gnuplot(
     while (getchar() != '\n'){}
 }
 
+/******************************************************************************/
 Gnuplot::Gnuplot(
          const string &title,
          const string &style,
@@ -193,17 +190,14 @@ Gnuplot::Gnuplot(
     this->nplots = 0;
     this->valid = true;
 
-
     if (x.size() == 0)
         throw GnuplotException("vector too small");
     if (!this->gnucmd)
         throw GnuplotException("Could'nt open connection to gnuplot");
-
     if (style == "")
         this->set_style("lines");
     else
         this->set_style(style);
-
     if (labelx == "")
         this->set_xlabel("X");
     else
@@ -219,9 +213,8 @@ Gnuplot::Gnuplot(
     while (getchar() != '\n'){}
 }
 
-//
+/******************************************************************************/
 // Destructor
-// 
 Gnuplot::~Gnuplot()
 {
     if ((this->to_delete).size() > 0)
@@ -235,11 +228,13 @@ Gnuplot::~Gnuplot()
     return;
 }
 
+/******************************************************************************/
 bool Gnuplot::is_valid(void)
 {
     return(this->valid);
 }
 
+/******************************************************************************/
 bool Gnuplot::get_program_path(const string pname)
 {
     list<string> ls;
@@ -265,6 +260,7 @@ bool Gnuplot::get_program_path(const string pname)
     return false;
 }
 
+/******************************************************************************/
 void Gnuplot::reset_plot(void)
 {       
     if (this->to_delete.size() > 0)
@@ -277,6 +273,7 @@ void Gnuplot::reset_plot(void)
     return;
 }
 
+/******************************************************************************/
 void Gnuplot::set_style(const string &stylestr)
 {
     if (stylestr != "lines" &&
@@ -293,6 +290,7 @@ void Gnuplot::set_style(const string &stylestr)
         this->pstyle = stylestr;
 }
 
+/******************************************************************************/
 void Gnuplot::cmd(const char *cmdstr, ...)
 {
     va_list ap;
@@ -307,6 +305,7 @@ void Gnuplot::cmd(const char *cmdstr, ...)
     return;
 }
 
+/******************************************************************************/
 void Gnuplot::set_ylabel(const string &label)
 {
     ostringstream cmdstr;
@@ -317,6 +316,7 @@ void Gnuplot::set_ylabel(const string &label)
     return;
 }
 
+/******************************************************************************/
 void Gnuplot::set_xlabel(const string &label)
 {
     ostringstream cmdstr;
@@ -327,10 +327,8 @@ void Gnuplot::set_xlabel(const string &label)
     return;
 }
 
-// 
-// Plots a linear equation (where you supply the
-// slope and intercept)
-//
+/******************************************************************************/
+// Plots a linear equation (where you supply the slope and intercept)
 void Gnuplot::plot_slope(double a, double b, const string &title)
 {
     ostringstream stitle;
@@ -350,9 +348,8 @@ void Gnuplot::plot_slope(double a, double b, const string &title)
     return;
 }
 
-//
+/******************************************************************************/
 // Plot an equation which is supplied as a string
-// 
 void Gnuplot::plot_equation(const string &equation, const string &title)
 {
     string titlestr, plotstr;
@@ -375,6 +372,7 @@ void Gnuplot::plot_equation(const string &equation, const string &title)
     return;
 }
 
+/******************************************************************************/
 void Gnuplot::plot_x(vector<double> d, const string &title)
 {
     ofstream tmp;
@@ -433,7 +431,8 @@ void Gnuplot::plot_x(vector<double> d, const string &title)
 
     return;
 }
-    
+
+/******************************************************************************/
 void Gnuplot::plot_xy(vector<double> x, vector<double> y, const string &title)
 {
     ofstream tmp;
@@ -498,4 +497,4 @@ void Gnuplot::plot_xy(vector<double> x, vector<double> y, const string &title)
     return;
 }
 
-
+/****************** End of file ***********************************************/

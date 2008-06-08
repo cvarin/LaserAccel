@@ -5,8 +5,8 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = Main.o SODE1D.o WriteTo.o Gnuplot_i.o INIsim.o $(RES)
-LINKOBJ  = Main.o SODE1D.o WriteTo.o Gnuplot_i.o INIsim.o $(RES)
+OBJ  = Main.o SODE1D.o Gnuplot_i.o GSLODE_IO.o LaserBeams.o LorentzForce.o $(RES)
+LINKOBJ  = Main.o SODE1D.o Gnuplot_i.o GSLODE_IO.o LaserBeams.o LorentzForce.o $(RES)
 LIBS =  ../../../../cygwin/lib/libgsl.a ../../../../cygwin/lib/libgslcblas.a  
 INCS = 
 CXXINCS = 
@@ -32,11 +32,14 @@ Main.o: Main.cpp
 SODE1D.o: SODE1D.cpp
 	$(CPP) -c SODE1D.cpp -o SODE1D.o $(CXXFLAGS)
 
-WriteTo.o: WriteTo.cpp
-	$(CPP) -c WriteTo.cpp -o WriteTo.o $(CXXFLAGS)
-
 Gnuplot_i.o: Gnuplot_i.cpp
 	$(CPP) -c Gnuplot_i.cpp -o Gnuplot_i.o $(CXXFLAGS)
 
-INIsim.o: INIsim.cpp
-	$(CPP) -c INIsim.cpp -o INIsim.o $(CXXFLAGS)
+GSLODE_IO.o: GSLODE_IO.cpp
+	$(CPP) -c GSLODE_IO.cpp -o GSLODE_IO.o $(CXXFLAGS)
+
+LaserBeams.o: LaserBeams.cpp
+	$(CPP) -c LaserBeams.cpp -o LaserBeams.o $(CXXFLAGS)
+
+LorentzForce.o: LorentzForce.cpp
+	$(CPP) -c LorentzForce.cpp -o LorentzForce.o $(CXXFLAGS)

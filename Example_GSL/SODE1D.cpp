@@ -11,13 +11,13 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_odeiv.h>
 
-#include "Structures.hpp"
+#include"SODE1D.hpp"
 
 /******************************************************************************/
 // The ordinary differential equations to solve
-int func(double t, const double y[], double dydt[], void* params)
+int GSL_Example(double t, const double y[], double dydt[], void* params)
 {
-    parameters *PtoParams = (parameters*)params;
+    GSL_ExampleParams *PtoParams = (GSL_ExampleParams*)params;
     double mu = PtoParams->mu;                      
         
     dydt[0] = y[1];
@@ -27,14 +27,14 @@ int func(double t, const double y[], double dydt[], void* params)
 
 /******************************************************************************/
 void SODE1D(double t,double t1,double h,double eps_abs,
-             parameters params, double y[], motion &traj, int &count)
+             GSL_ExampleParams params, double y[], motion &traj, int &count)
 { 
     int status;
     const gsl_odeiv_step_type * T = gsl_odeiv_step_rk8pd;
     gsl_odeiv_step * s            = gsl_odeiv_step_alloc(T,2);
     gsl_odeiv_control * c         = gsl_odeiv_control_y_new(eps_abs,0.0);
     gsl_odeiv_evolve * e          = gsl_odeiv_evolve_alloc(2);
-    gsl_odeiv_system sys          = {func,NULL,2,&params};
+    gsl_odeiv_system sys          = {GSL_Example,NULL,2,&params};
     
     // Filling the first item of the output vectors
     traj.time.push_back(t);
