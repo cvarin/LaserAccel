@@ -5,7 +5,7 @@
 
 *******************************************************************************/
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <vector>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_matrix.h>

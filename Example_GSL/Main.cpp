@@ -1,9 +1,20 @@
+#include<cstdio>
 #include<vector>
 #include<cmath>
 
-#include "Constants.hpp"
-#include "SODE1D.hpp"
-#include "GSLODE_IO.hpp"
+#include"Constants.hpp"
+#include"GSLODE_IO.hpp"
+#include"LaserBeams.hpp"
+#include"SODE1D.hpp"
+
+//    // Laser beam parameters
+//    double P = 1e12;        // Laser power Watts
+//    double lambda = 800e-9; // Wavelength in m
+//    double wo = 3e-6;       // Beam waist in m
+//    double T = 10e-15;      // Pulse duration in s
+//    double phi_0 = 0.0;     // Field phase at beam waist
+//    double zp0 = 0.0;       // Initial position of the center of the pulse
+//    double z_Rayleigh = Pi*pow(wo,2)/2; // Rayleigh distance
 
 /******************************************************************************/
 int main (void)
@@ -30,9 +41,11 @@ int main (void)
     SODE1D(t,t1,h,eps_abs,Params,y,Traj,count);
     
     // Output      
-    WriteToFile(Traj.time,Traj.position,Traj.velocity,count);
-    WriteToGnuplot(&Traj,count);
-      
+    //WriteToFile(Traj.time,Traj.position,Traj.velocity,count);
+    //WriteToGnuplot(&Traj,count);
+    
+    //Write_RPLB_Transverse_Distribution(300,5.0,"RPLB_components.dat");
+    
     return 0;
 }
 
