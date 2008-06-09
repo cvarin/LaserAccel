@@ -22,7 +22,7 @@ RPLB_EMfield RPLB_field_components(double r, double z, double t,
     const double TINY = 1.0e-30;
     const double exp_1_2 = exp(0.5);
     const double Eo = bp.Eo;
-    const double ko = bp.ko;
+    const double ko = bp.k;
     const double omega = bp.omega;
     const double wo = bp.wo;
     const double T  = bp.T;
@@ -48,30 +48,37 @@ RPLB_EMfield RPLB_field_components(double r, double z, double t,
 }                                    
 
 /******************************************************************************/
-void Set_RPLB_Params(RPLB_Params *beam_params)
+void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda, 
+                      double phi_0, RPLB_Params *bp)
 {
-     
+    /************** Provided values *******************************************/
+    bp->P = P;            // Laser power [W]
+    bp->wo = wo;          // Beam spot size at the waist [m]
+    bp->T = T;            // Pulse duration [s]
+    bp->dzo = dzo;        // Initial position of the center of the pulse [m]
+    bp->lambda = lambda;  // Wavelength [m]
+    bp->phi_0 = phi_0;    // Field phase at beam waist [rad]
+    
+    /************** Derived values ********************************************/
+    bp->k = 2.0*Pi/lambda;            // Wavenumber [rad/m]
+    bp->omega = bp->k*co;             // Angular frequency [rad/s]
+    bp->z_Rayleigh = 0.5*bp->k*wo*wo; // Rayleigh distance [m]
+    bp->I = 2*exp(-1.0)*P/(Pi*wo*wo); // Intensity [W/m^2]
+    bp->W = 0.5*Pi*P*T;               // Pulse Energy [J]
+    bp->Eo = sqrt(2*eta_0*bp->I); // Transverse electric component amplitude [V/m]
+    bp->Ez_norm = 0.5*bp->k*wo*exp(-0.5)/sqrt_2;// Long. E-field normalization factor
+    bp->B_theta_norm = co; // B-field normalization factor
+    bp->ao = (q_e*bp->Eo)/(me_kg*co*bp->omega);// Normalized transv. E-field strength
+    bp->az = bp->ao/bp->Ez_norm; // Normalized long. E-field strength
 }
 
 /******************************************************************************/
 void Write_RPLB_Transverse_Distribution(int N, double ro, const char *filename)
 {
     RPLB_Params bp;
-    RPLB_EMfield champ;
+    RPLB_EMfield champ1;
+    RPLB_EMfield champ2;
     double r = 0.0;
-    
-    bp.P = 0.0;          // Laser power [W]
-    bp.I = 0.0;          // Intensity [W/cm^2]
-    bp.W = 0.0;          // Pulse Energy [J]
-    bp.Eo = 1.0;         // Transverse electric component amplitude
-    bp.lambda = 1.0;     // Wavelength [m]
-    bp.ko = 2*Pi;         // Wavenumber [rad/m]
-    bp.omega = bp.ko*co;      // Angular frequency [rad/s]
-    bp.wo = 1.0;         // Beam spot size at the waist [m]
-    bp.T = 1.0;          // Pulse duration [s]
-    bp.phi_0 = -0.0*Pi;      // Field phase at beam waist [rad]
-    bp.dzo = 0.0;        // Initial position of the center of the pulse [m]
-    bp.z_Rayleigh = 0.5*bp.ko*bp.wo*bp.wo; // Rayleigh distance [m]
     
     FILE *file = fopen(filename,"w");
     if(file==NULL)
@@ -80,10 +87,17 @@ void Write_RPLB_Transverse_Distribution(int N, double ro, const char *filename)
          getchar();
          exit(1);
     }
+    Set_RPLB_Params(0.0,1.0,1.0,0.0,1.0,0.0,&bp);
+    bp.Eo = 1.0;
     while(r < ro)
     {
-         champ = RPLB_field_components(r,0.0,0.0,bp);
-         fprintf(file,"%e\t%e\t%e\t%e\n",r,champ.Er,champ.Ez,champ.B_theta);
+         bp.phi_0 = 0.0;
+         champ1 = RPLB_field_components(r,0.0,0.0,bp);
+         bp.phi_0 = -0.5*Pi;
+         champ2 = RPLB_field_components(r,0.0,0.0,bp);
+         fprintf(file,"%e\t%e\t%e\t%e\n",
+                  r, champ1.Er, champ2.Ez*bp.Ez_norm,
+                    champ1.B_theta*bp.B_theta_norm);
          r+=2*ro/N;
     }
     fclose(file);

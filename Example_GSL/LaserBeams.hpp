@@ -4,21 +4,25 @@
 /****************** Structures ************************************************/
 struct RPLB_Params
 {
+    /************** Provided values *******************************************/
     double P;            // Laser power [W]
-    double I;            // Intensity [W/cm^2]
-    double W;            // Pulse Energy [J]
-    double Eo;           // Transverse electric component amplitude
-    double Er_norm;      // Normalization factor
-    double Ez_norm;      // Normalization factor
-    double B_theta_norm; // Normalization factor
-    double lambda;       // Wavelength [m]
-    double ko;           // Wavenumber [rad/m]
-    double omega;        // Angular frequency [rad/s]
     double wo;           // Beam spot size at the waist [m]
     double T;            // Pulse duration [s]
-    double phi_0;        // Field phase at beam waist [rad]
     double dzo;          // Initial position of the center of the pulse [m]
+    double lambda;       // Wavelength [m]
+    double phi_0;        // Field phase at beam waist [rad]
+    
+    /************** Derived values ********************************************/
+    double k;            // Wavenumber [rad/m]
+    double omega;        // Angular frequency [rad/s]
     double z_Rayleigh;   // Rayleigh distance [m]
+    double I;            // Intensity [W/cm^2]
+    double W;            // Pulse Energy [J]
+    double Eo;           // Transverse electric component amplitude [V/m]
+    double Ez_norm;      // Long. E-field normalization factor
+    double B_theta_norm; // B-field normalization factor
+    double ao;           // Normalized transv. E-field strength
+    double az;           // Normalized long. E-field strength
 };
 
 /******************************************************************************/
@@ -49,8 +53,11 @@ struct RPLB_EMfield
 };
 
 /****************** Accessible functions prototypes ***************************/
+// Radially polarized laser beam (RPLB)
 RPLB_EMfield RPLB_field_components(double r, double z, double t,
                                     const RPLB_Params bp);
+void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda, 
+                      double phi_0, RPLB_Params *bp);
 void Write_RPLB_Transverse_Distribution(int N, double ro, const char *filename);
 
 #endif // End of file
