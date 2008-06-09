@@ -11,16 +11,17 @@ using namespace std;
 /******************************************************************************/
 /****************** External functions ****************************************/
 /******************************************************************************/
-void Read_Input_File(GSL_ExampleParams *params)
+void Read_Input_File(GSL_ExampleParams *params, const char *filename)
 {     
-    FILE *ModelParams = fopen("ModelParams.ini", "r");
-    
-    if( ModelParams == NULL )
+    FILE *file = fopen(filename, "r");  
+    if(file == NULL)
     {
-        cout << "Error: Unable to open \'ModelParams.ini\'." << endl;
+        puts("Error: Unable to open \'ModelParams.ini\'.");
+        getchar();
+        exit(1);
     }
-    else fscanf(ModelParams, "mu : %lf", &params->mu);
-    fclose(ModelParams);
+    fscanf(file, "mu : %lf", &params->mu);
+    fclose(file);
 }
 
 /******************************************************************************/
