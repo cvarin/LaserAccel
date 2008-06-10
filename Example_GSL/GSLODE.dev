@@ -108,7 +108,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit11]
-FileName=LaserBeams.cpp
+FileName=LorentzForce.cpp
 CompileCpp=1
 Folder=SODE1D
 Compile=1
@@ -118,7 +118,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit10]
-FileName=GSLODE_IO.hpp
+FileName=LaserBeams.hpp
 CompileCpp=1
 Folder=SODE1D
 Compile=1
@@ -128,8 +128,8 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit12]
-FileName=LaserBeams.hpp
-Folder=SODE1D
+FileName=LaserAccel.cpp
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -138,9 +138,9 @@ BuildCmd=
 CompileCpp=1
 
 [Unit13]
-FileName=LorentzForce.cpp
+FileName=LaserAccel.hpp
 CompileCpp=1
-Folder=SODE1D
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -157,20 +157,10 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit9]
-FileName=GSLODE_IO.cpp
-CompileCpp=1
-Folder=SODE1D
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit14]
-FileName=LorentzForce.cpp
+FileName=LaserAccel.cpp
 CompileCpp=1
-Folder=SODE1D
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -182,6 +172,26 @@ FileName=ModelParams.ini
 Folder=SODE1D
 Compile=0
 Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit15]
+FileName=LaserAccel.hpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit9]
+FileName=LaserBeams.cpp
+CompileCpp=1
+Folder=SODE1D
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
