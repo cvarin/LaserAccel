@@ -1,7 +1,7 @@
 /*******************************************************************************
 
          Set of functions that gives the electromagnetic field 
-         components of laser beams.
+         components of radially polarized laser beams (RPLB).
 
 *******************************************************************************/
 #include <cstdlib>
@@ -9,7 +9,7 @@
 #include <cmath>
 
 #include "Constants.hpp"
-#include "LaserBeams.hpp"
+#include "RPLBeam.hpp"
 
 /******************************************************************************/
 RPLB_EMfield RPLB_field_components(double r, double z, double t,

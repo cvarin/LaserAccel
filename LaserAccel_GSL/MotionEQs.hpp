@@ -1,12 +1,12 @@
-#ifndef _INCLUDE_LaserBeams_hpp
-#define _INCLUDE_LaserBeams_hpp
+#ifndef _INCLUDE_MotionEQs_hpp
+#define _INCLUDE_MotionEQs_hpp
 
 /*******************************************************************************
                                                                                 
-            Binds all laser beams definitions
+            Binds all equations of motion definitions
 
 *******************************************************************************/
 
-#include "RPLBeam.hpp"
+#include "LorentzForce.hpp"
 
-#endif // End of file
+# endif // End of file

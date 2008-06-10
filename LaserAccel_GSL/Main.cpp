@@ -3,7 +3,7 @@
 #include<ctime>
 
 #include"Constants.hpp"
-#include"LaserBeams.hpp"
+#include"LaserAccel.hpp"
 
 /****************** Local functions *******************************************/
 inline void ExecTime(clock_t dt)

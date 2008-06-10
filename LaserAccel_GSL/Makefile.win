@@ -5,8 +5,8 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = Main.o LaserBeams.o LorentzForce.o LaserAccel.o $(RES)
-LINKOBJ  = Main.o LaserBeams.o LorentzForce.o LaserAccel.o $(RES)
+OBJ  = Main.o LorentzForce.o LaserAccel.o RPLBeam.o $(RES)
+LINKOBJ  = Main.o LorentzForce.o LaserAccel.o RPLBeam.o $(RES)
 LIBS =  ../../../../cygwin/lib/libgsl.a ../../../../cygwin/lib/libgslcblas.a  
 INCS = 
 CXXINCS = 
@@ -29,11 +29,11 @@ $(BIN): $(OBJ)
 Main.o: Main.cpp
 	$(CPP) -c Main.cpp -o Main.o $(CXXFLAGS)
 
-LaserBeams.o: LaserBeams.cpp
-	$(CPP) -c LaserBeams.cpp -o LaserBeams.o $(CXXFLAGS)
-
 LorentzForce.o: LorentzForce.cpp
 	$(CPP) -c LorentzForce.cpp -o LorentzForce.o $(CXXFLAGS)
 
 LaserAccel.o: LaserAccel.cpp
 	$(CPP) -c LaserAccel.cpp -o LaserAccel.o $(CXXFLAGS)
+
+RPLBeam.o: RPLBeam.cpp
+	$(CPP) -c RPLBeam.cpp -o RPLBeam.o $(CXXFLAGS)
