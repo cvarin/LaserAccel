@@ -111,7 +111,9 @@ void RPLB_Transverse_Distribution(int N, double ro, const char *filename)
          r+=2*ro/N;
     }
     fclose(file);
-    system("gnuplot Visualization/RPBL_components.gp");
+   // system("gnuplot");
+       system("gnuplot Visualization/RPLB_components.gp");
+   // system("load \'Visualization/RPLB_components.gp\'");
 }
 
 /****************** End of file ***********************************************/

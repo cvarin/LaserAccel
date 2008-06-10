@@ -10,8 +10,7 @@
 #include"LorentzForce.hpp"
 
 /****************** External functions implementation *************************/
-int RPLB_3D_LorentzForce(const double t, double y[], 
-                          double dydt[], void* p)
+int RPLB_3D_LorentzForce(const double t, double y[], double dydt[], void* p)
 {
     /************** Extract parameters from the external structure ************/ 
     RPLB_SimParams *pp = (RPLB_SimParams*)p;
