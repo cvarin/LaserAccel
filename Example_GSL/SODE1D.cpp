@@ -26,7 +26,7 @@ int GSL_Example(double t, const double y[], double dydt[], void* params)
 }
 
 /******************************************************************************/
-void SODE1D(double t,double t1,double h,double eps_abs,
+void SODE1D(double t, double t1, double h, double eps_abs,
              GSL_ExampleParams params, double y[], motion &traj, int &count)
 { 
     int status;
