@@ -5,35 +5,29 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = Main.o SODE1D.o Gnuplot_i.o LaserBeams.o LorentzForce.o LaserAccel.o $(RES)
-LINKOBJ  = Main.o SODE1D.o Gnuplot_i.o LaserBeams.o LorentzForce.o LaserAccel.o $(RES)
+OBJ  = Main.o LaserBeams.o LorentzForce.o LaserAccel.o $(RES)
+LINKOBJ  = Main.o LaserBeams.o LorentzForce.o LaserAccel.o $(RES)
 LIBS =  ../../../../cygwin/lib/libgsl.a ../../../../cygwin/lib/libgslcblas.a  
 INCS = 
 CXXINCS = 
-BIN  = GSLODE.exe
+BIN  = ProjectFile.exe
 CXXFLAGS = $(CXXINCS)   -fexpensive-optimizations -O2
 CFLAGS = $(INCS)   -fexpensive-optimizations -O2
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
 
-all: all-before GSLODE.exe all-after
+all: all-before ProjectFile.exe all-after
 
 
 clean: clean-custom
 	${RM} $(OBJ) $(BIN)
 
 $(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o "GSLODE.exe" $(LIBS)
+	$(CPP) $(LINKOBJ) -o "ProjectFile.exe" $(LIBS)
 
 Main.o: Main.cpp
 	$(CPP) -c Main.cpp -o Main.o $(CXXFLAGS)
-
-SODE1D.o: SODE1D.cpp
-	$(CPP) -c SODE1D.cpp -o SODE1D.o $(CXXFLAGS)
-
-Gnuplot_i.o: Gnuplot_i.cpp
-	$(CPP) -c Gnuplot_i.cpp -o Gnuplot_i.o $(CXXFLAGS)
 
 LaserBeams.o: LaserBeams.cpp
 	$(CPP) -c LaserBeams.cpp -o LaserBeams.o $(CXXFLAGS)

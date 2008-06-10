@@ -5,9 +5,7 @@
        Weblink : http://www.gnu.org/software/gsl//manual/html_node/
 
 *******************************************************************************/
-#include <iostream>
-#include <cstdio>
-#include <vector> //// Pas necessaire!
+
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_odeiv.h>
@@ -16,4 +14,7 @@
 
 /******************************************************************************/
 
+
+
 /****************** End of file ***********************************************/
+
