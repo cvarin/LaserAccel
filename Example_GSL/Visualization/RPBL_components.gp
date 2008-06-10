@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-datafile = './data/RPLB_components.dat'
+load "./Visualization/RPLB_components.path"
 
 set xlabel "Normalized radial coordinate (r_0/w_0)"
 set ylabel "Normalized amplitude"

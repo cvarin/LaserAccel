@@ -73,20 +73,28 @@ void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda,
 }
 
 /******************************************************************************/
-void Write_RPLB_Transverse_Distribution(int N, double ro, const char *filename)
+void RPLB_Transverse_Distribution(int N, double ro, const char *filename)
 {
     RPLB_Params bp;
     RPLB_EMfield champ1;
     RPLB_EMfield champ2;
     double r = 0.0;
     
+    /**************************************************************************/
+    FILE *datapath = fopen("./Visualization/RPLB_components.path","w");
     FILE *file = fopen(filename,"w");
-    if(file==NULL)
+    if(file==NULL || datapath==NULL)
     {
-         printf("Can't open %s.\n",filename);
+         printf("Can't open file in \'RPLB_Transverse_Distribution()\'.\n");
          getchar();
          exit(1);
     }
+    
+    /************** Export output file location *******************************/
+    fprintf(datapath,"datafile = \'%s\'",filename);
+    fclose(datapath);
+    
+    /************** Write data file *******************************************/
     Set_RPLB_Params(0.0,1.0,1.0,0.0,1.0,0.0,&bp);
     bp.Eo = 1.0;
     while(r < ro)
@@ -101,6 +109,7 @@ void Write_RPLB_Transverse_Distribution(int N, double ro, const char *filename)
          r+=2*ro/N;
     }
     fclose(file);
+    system("gnuplot Visualization/RPBL_components.gp");
 }
 
 /****************** End of file ***********************************************/

@@ -35,8 +35,7 @@ int main (void)
     //WriteToFile(Traj.time,Traj.position,Traj.velocity,count);
     //WriteToGnuplot(&Traj,count);
     
-    Write_RPLB_Transverse_Distribution(200,3.5,"./data/RPLB_components.dat");
-    system("gnuplot Visualization/RPBL_components.gp");
+    RPLB_Transverse_Distribution(200,3.5,"./data/RPLB_components.dat");
     
     return 0;
 }

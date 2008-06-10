@@ -58,6 +58,6 @@ RPLB_EMfield RPLB_field_components(double r, double z, double t,
                                     const RPLB_Params bp);
 void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda, 
                       double phi_0, RPLB_Params *bp);
-void Write_RPLB_Transverse_Distribution(int N, double ro, const char *filename);
+void RPLB_Transverse_Distribution(int N, double ro, const char *filename);
 
 #endif // End of file
