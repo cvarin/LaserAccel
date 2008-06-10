@@ -81,7 +81,7 @@ void SODE1D(double t, double t1, double h,
 void SODE1D_toFile(vector<double> t, vector<double> p, 
                     vector<double> v, int count)
 {      
-     ofstream OutFile("./data/SODE1D.dat", ios::out);    
+     ofstream OutFile("./SODE1D.dat", ios::out);    
      for(int i=0 ; i<=count ; i++)
      {
         OutFile << t[i]  << "\t" 
