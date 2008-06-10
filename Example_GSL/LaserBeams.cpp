@@ -79,13 +79,15 @@ void RPLB_Transverse_Distribution(int N, double ro, const char *filename)
     RPLB_EMfield champ1;
     RPLB_EMfield champ2;
     double r = 0.0;
+    const char *pathfile = "./Visualization/RPLB_components.path";
     
     /**************************************************************************/
-    FILE *datapath = fopen("./Visualization/RPLB_components.path","w");
+    FILE *datapath = fopen(pathfile,"w");
     FILE *file = fopen(filename,"w");
     if(file==NULL || datapath==NULL)
     {
-         printf("Can't open file in \'RPLB_Transverse_Distribution()\'.\n");
+         if(file==NULL) printf("Can't open \'%s\'.\n",filename);
+         if(datapath==NULL) printf("Can't open \'%s\'.\n",pathfile);
          getchar();
          exit(1);
     }
