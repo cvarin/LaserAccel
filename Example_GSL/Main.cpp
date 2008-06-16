@@ -8,7 +8,7 @@ int main (void)
 {    
     // Parameters for the integration
     double mu = 10.0;
-    double t = 0.0, t1 = 100.0; // Time box
+    double t = 0.0, t1 = 300.0; // Time box
     double h = 1e-6;            // Starting stepsize 
     double eps_abs = 1e-6;      // Absolute precision required
     
