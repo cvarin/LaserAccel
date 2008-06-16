@@ -1,7 +1,7 @@
 #ifndef _INCLUDE_LorentzForce_hpp
 #define _INCLUDE_LorentzForce_hpp
 
-#include"LaserBeams.hpp"
+#include "LaserBeams.hpp"
 
 /****************** Structures ************************************************/
 struct RPLB_SimParams
@@ -12,6 +12,6 @@ struct RPLB_SimParams
 };
 
 /****************** Lorentz force equations ***********************************/
-int RPLB_3D_LorentzForce(const double t, double y[], double dydt[], void* p);
+int RPLB_3D_LorentzForce(double t, const double y[], double dydt[], void* p);
 
 #endif // End of file

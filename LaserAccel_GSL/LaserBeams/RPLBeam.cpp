@@ -28,12 +28,12 @@ RPLB_EMfield RPLB_field_components(double r, double z, double t,
     const double T  = bp.T;
     const double zR = bp.z_Rayleigh;
     const double dzo = bp.dzo;
-    const double phi_0 = bp.phi_0;
+    const double phi0 = bp.phi0;
     const double w  = wo*sqrt(1 + (z*z)/(zR*zR));
     const double R  = z + (zR*zR)/z;
     const double Psi_G = atan(z/zR);
     const double Psi_C = (z <= TINY)? 0.0 : 0.5*ko*r*r/R;
-    const double Psi = omega*t - ko*z + 2*Psi_G - Psi_C - phi_0;
+    const double Psi = omega*t - ko*z + 2*Psi_G - Psi_C - phi0;
     const double t_prime = t - (z - dzo)*inv_co;
     const double pulse_enveloppe = exp(-t_prime*t_prime/(T*T));
     const double spatial_enveloppe = (wo*wo)/(w*w)*exp(-(r*r)/(w*w));
@@ -49,7 +49,7 @@ RPLB_EMfield RPLB_field_components(double r, double z, double t,
 
 /******************************************************************************/
 void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda, 
-                      double phi_0, RPLB_Params *bp)
+                      double phi0, RPLB_Params *bp)
 {
     /************** Provided values *******************************************/
     bp->P = P;            // Laser power [W]
@@ -57,7 +57,7 @@ void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda,
     bp->T = T;            // Pulse duration [s]
     bp->dzo = dzo;        // Initial position of the center of the pulse [m]
     bp->lambda = lambda;  // Wavelength [m]
-    bp->phi_0 = phi_0;    // Field phase at beam waist [rad]
+    bp->phi0 = phi0;    // Field phase at beam waist [rad]
     
     /************** Derived values ********************************************/
     bp->k = 2.0*Pi/lambda;            // Wavenumber [rad/m]
@@ -101,9 +101,9 @@ void RPLB_Transverse_Distribution(int N, double ro, const char *filename)
     bp.Eo = 1.0;
     while(r < ro)
     {
-         bp.phi_0 = 0.0;
+         bp.phi0 = 0.0;
          champ1 = RPLB_field_components(r,0.0,0.0,bp);
-         bp.phi_0 = -0.5*Pi;
+         bp.phi0 = -0.5*Pi;
          champ2 = RPLB_field_components(r,0.0,0.0,bp);
          fprintf(file,"%e\t%e\t%e\t%e\n",
                   r, champ1.Er, champ2.Ez*bp.Ez_norm,

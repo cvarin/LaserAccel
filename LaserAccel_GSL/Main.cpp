@@ -15,18 +15,32 @@ inline void ExecTime(clock_t dt)
 /******************************************************************************/
 int main (void)
 {    
+     SolverParams sp;
+    
     // Parameters for the integration
-//    double t = 0.0, t1 = 100.0; // Time box
-//    double h = 1e-6;            // Starting stepsize 
-//    double eps_abs = 1e-6;      // Absolute precision required
+     sp.t = 0.0, sp.tf = 40.0e-12; // Time box
+     sp.h = 1.0e-15;               // Starting stepsize 
+     sp.eps_abs = 1.0e-12;         // Absolute precision required
     
     // Particle
-//    double Wo=me_MeV+0.200; //Initial Energy = masse energy + kinetic energy
-//    double z0=1.0;
-//    double v0=sqrt(1 - (me_MeV*me_MeV)/(Wo*Wo)); //Normalized initial velocity
+    double q = q_e;
+    double m = me_kg;
+    double Wo=me_MeV+0.0; //Initial Energy = masse energy + kinetic energy
+    double z0=0.0;
+    double v0=sqrt(1 - (me_MeV*me_MeV)/(Wo*Wo)); //Normalized initial velocity
     
-    RPLB_Transverse_Distribution(200,3.5,"./data/RPLB_components.dat");
+    // Laser Beam
+    double P = 100.0e12;
+    double wo = 3.0e-6;
+    double T = 10.0e-15;
+    double dzo = -2.0*T*co;
+    double lambda = 0.8e-6;
+    double phio = 0.0*Pi;
     
+    RPLB_Axial_Trajectory(P,wo,T,dzo,lambda,phio,q,m,z0,v0,sp);
+    
+    //RPLB_Transverse_Distribution(200,3.5,"./data/RPLB_components.dat");
+        
     /**************************************************************************/
     ExecTime(clock());
     return 0;

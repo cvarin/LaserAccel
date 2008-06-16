@@ -10,7 +10,7 @@ struct RPLB_Params
     double T;            // Pulse duration [s]
     double dzo;          // Initial position of the center of the pulse [m]
     double lambda;       // Wavelength [m]
-    double phi_0;        // Field phase at beam waist [rad]
+    double phi0;        // Field phase at beam waist [rad]
     
     /************** Derived values ********************************************/
     double k;            // Wavenumber [rad/m]
