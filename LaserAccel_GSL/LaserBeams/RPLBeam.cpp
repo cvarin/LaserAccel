@@ -48,6 +48,24 @@ RPLB_EMfield RPLB_field_components(double r, double z, double t,
 }                                    
 
 /******************************************************************************/
+double RPLB_Axial_component(double z, double t, const RPLB_Params p)
+{   
+    /************** Initializations *******************************************/
+    const double TINY = 1.0e-30;
+    const double exp_1_2 = exp(0.5);
+    const double w = p.wo*sqrt(1 + (z*z)/(p.z_Rayleigh*p.z_Rayleigh));
+    const double Psi_G = atan(z/p.z_Rayleigh);
+    const double t_prime = t - (z - p.dzo)*inv_co;
+    const double pulse_enveloppe = exp(-t_prime*t_prime/(p.T*p.T));
+    const double spatial_enveloppe = (p.wo*p.wo)/(w*w);
+    const double carrier = sin(p.omega*t - p.k*z + 2*Psi_G - p.phi0);
+    
+    /************** Axial field component is calculated ***********************/
+    return p.Eo*exp_1_2*(2*sqrt_2/(p.k*p.wo))
+            *spatial_enveloppe*pulse_enveloppe*carrier;
+}
+
+/******************************************************************************/
 void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda, 
                       double phi0, RPLB_Params *bp)
 {

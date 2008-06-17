@@ -56,6 +56,7 @@ struct RPLB_EMfield
 // Radially polarized laser beam (RPLB)
 RPLB_EMfield RPLB_field_components(double r, double z, double t,
                                     const RPLB_Params bp);
+double RPLB_Axial_component(double z, double t, const RPLB_Params bp);
 void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda, 
                       double phi_0, RPLB_Params *bp);
 void RPLB_Transverse_Distribution(int N, double ro, const char *filename);

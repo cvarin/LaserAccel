@@ -16,5 +16,11 @@ struct SolverParams
 void RPLB_Axial_Trajectory(double P, double wo, double T, double dzo, 
                             double lambda, double phio, double q, double m,
                              double z0, double v0, SolverParams &sp);
+void RPLB_3D_Trajectory(double P, double wo, double T, double dzo, 
+                         double lambda, double phio, double q, double m,
+                          double r0, double vr0, double z0, double vz0, 
+                           SolverParams &sp);
+double *RPLB_Phase_Scan(double P, double wo, double T, double dzo, 
+                       double lambda, double q, double m, double z0, double v0);
 
 # endif // End of file
