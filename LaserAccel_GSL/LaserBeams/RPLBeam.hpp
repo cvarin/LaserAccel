@@ -8,9 +8,10 @@ struct RPLB_Params
     double P;            // Laser power [W]
     double wo;           // Beam spot size at the waist [m]
     double T;            // Pulse duration [s]
-    double dzo;          // Initial position of the center of the pulse [m]
+    double zf;           // Focal plane [m]
+    double dzo;          // Initial position of the pulse relative to zf [m]
     double lambda;       // Wavelength [m]
-    double phi0;        // Field phase at beam waist [rad]
+    double phi0;         // Field phase at beam waist [rad]
     
     /************** Derived values ********************************************/
     double k;            // Wavenumber [rad/m]
@@ -57,8 +58,8 @@ struct RPLB_EMfield
 RPLB_EMfield RPLB_field_components(double r, double z, double t,
                                     const RPLB_Params bp);
 double RPLB_Axial_component(double z, double t, const RPLB_Params bp);
-void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda, 
-                      double phi_0, RPLB_Params *bp);
+void Set_RPLB_Params(double P, double wo, double T, double zf, 
+                      double dzo, double lambda, double phi0, RPLB_Params *bp);
 void RPLB_Transverse_Distribution(int N, double ro, const char *filename);
 
 #endif // End of file

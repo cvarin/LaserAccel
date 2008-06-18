@@ -27,14 +27,15 @@ RPLB_EMfield RPLB_field_components(double r, double z, double t,
     const double wo = bp.wo;
     const double T  = bp.T;
     const double zR = bp.z_Rayleigh;
+    const double dz = z - bp.zf;
     const double dzo = bp.dzo;
     const double phi0 = bp.phi0;
     const double w  = wo*sqrt(1 + (z*z)/(zR*zR));
-    const double R  = z + (zR*zR)/z;
-    const double Psi_G = atan(z/zR);
+    const double R  = dz + (zR*zR)/dz;
+    const double Psi_G = atan(dz/zR);
     const double Psi_C = (z <= TINY)? 0.0 : 0.5*ko*r*r/R;
-    const double Psi = omega*t - ko*z + 2*Psi_G - Psi_C - phi0;
-    const double t_prime = t - (z - dzo)*inv_co;
+    const double Psi = omega*t - ko*dz + 2*Psi_G - Psi_C - phi0;
+    const double t_prime = t - (dz - dzo)*inv_co;
     const double pulse_enveloppe = exp(-t_prime*t_prime/(T*T));
     const double spatial_enveloppe = (wo*wo)/(w*w)*exp(-(r*r)/(w*w));
     
@@ -53,12 +54,13 @@ double RPLB_Axial_component(double z, double t, const RPLB_Params p)
     /************** Initializations *******************************************/
     const double TINY = 1.0e-30;
     const double exp_1_2 = exp(0.5);
-    const double w = p.wo*sqrt(1 + (z*z)/(p.z_Rayleigh*p.z_Rayleigh));
-    const double Psi_G = atan(z/p.z_Rayleigh);
-    const double t_prime = t - (z - p.dzo)*inv_co;
+    const double dz = z - p.zf;
+    const double w = p.wo*sqrt(1 + (dz*dz)/(p.z_Rayleigh*p.z_Rayleigh));
+    const double Psi_G = atan(dz/p.z_Rayleigh);
+    const double t_prime = t - (dz - p.dzo)*inv_co;
     const double pulse_enveloppe = exp(-t_prime*t_prime/(p.T*p.T));
     const double spatial_enveloppe = (p.wo*p.wo)/(w*w);
-    const double carrier = sin(p.omega*t - p.k*z + 2*Psi_G - p.phi0);
+    const double carrier = sin(p.omega*t - p.k*dz + 2*Psi_G - p.phi0);
     
     /************** Axial field component is calculated ***********************/
     return p.Eo*exp_1_2*(2*sqrt_2/(p.k*p.wo))
@@ -66,16 +68,17 @@ double RPLB_Axial_component(double z, double t, const RPLB_Params p)
 }
 
 /******************************************************************************/
-void Set_RPLB_Params(double P, double wo, double T, double dzo, double lambda, 
-                      double phi0, RPLB_Params *bp)
+void Set_RPLB_Params(double P, double wo, double T, double zf, 
+                      double dzo, double lambda, double phi0, RPLB_Params *bp)
 {
     /************** Provided values *******************************************/
     bp->P = P;            // Laser power [W]
     bp->wo = wo;          // Beam spot size at the waist [m]
     bp->T = T;            // Pulse duration [s]
-    bp->dzo = dzo;        // Initial position of the center of the pulse [m]
+    bp->zf = zf;          // Focal plane [m]
+    bp->dzo = dzo;        // Init. position of the pulse relative to zf [m]
     bp->lambda = lambda;  // Wavelength [m]
-    bp->phi0 = phi0;    // Field phase at beam waist [rad]
+    bp->phi0 = phi0;      // Field phase at beam waist [rad]
     
     /************** Derived values ********************************************/
     bp->k = 2.0*Pi/lambda;            // Wavenumber [rad/m]
@@ -115,7 +118,7 @@ void RPLB_Transverse_Distribution(int N, double ro, const char *filename)
     fclose(datapath);
     
     /************** Write data file *******************************************/
-    Set_RPLB_Params(0.0,1.0,1.0,0.0,1.0,0.0,&bp);
+    Set_RPLB_Params(0.0,1.0,1.0,0.0,0.0,1.0,0.0,&bp);
     bp.Eo = 1.0;
     while(r < ro)
     {

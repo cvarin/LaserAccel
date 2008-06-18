@@ -21,14 +21,13 @@
 /******************************************************************************/
 /****************** Local functions prototypes ********************************/
 /******************************************************************************/
-void check_and_fix_phase(double &phi);
 double *Get_Optimums(std::vector<double> time, 
                       std::vector<double> energy, int count);
 
 /******************************************************************************/
 /****************** Accessible functions implementation ***********************/
 /******************************************************************************/
-void RPLB_Axial_Trajectory(double P, double wo, double T, double dzo, 
+void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo, 
                             double lambda, double phio, double q, double m,
                              double z0, double v0, SolverParams &sp)
 {
@@ -55,7 +54,7 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double dzo,
     
     /************** Simulation paramaters initialization **********************/
     double y[2] = {z0,v0};
-    Set_RPLB_Params(P,wo,T,dzo,lambda,phio,&bp);
+    Set_RPLB_Params(P,wo,T,zf,dzo,lambda,phio,&bp);
     eqp.q = q;
     eqp.m = m;
     eqp.Ez = RPLB_Axial_component(y[0],sp.t,bp);
@@ -65,7 +64,7 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double dzo,
     time.push_back(sp.t);
     energy.push_back(me_MeV/sqrt(1-y[1]*y[1]*inv_co_square));
     while(sp.t < sp.tf)
-    {
+    {  
        /*********** Update laser beam and other parameters ********************/
        eqp.Ez = RPLB_Axial_component(y[0],sp.t,bp);
        
@@ -109,7 +108,7 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double dzo,
 }
 
 /******************************************************************************/
-void RPLB_3D_Trajectory(double P, double wo, double T, double dzo, 
+void RPLB_3D_Trajectory(double P, double wo, double T, double zf, double dzo, 
                          double lambda, double phio, double q, double m,
                           double r0, double vr0, double z0, double vz0, 
                            SolverParams &sp)
@@ -137,7 +136,7 @@ void RPLB_3D_Trajectory(double P, double wo, double T, double dzo,
     
     /************** Simulation paramaters initialization **********************/
     double y[4] = {r0,z0,vr0,vz0};
-    Set_RPLB_Params(P,wo,T,dzo,lambda,phio,&bp);
+    Set_RPLB_Params(P,wo,T,zf,dzo,lambda,phio,&bp);
     eqp.q = q;
     eqp.m = m;
     eqp.emf = RPLB_field_components(y[0],y[1],sp.t,bp);
@@ -176,7 +175,7 @@ void RPLB_3D_Trajectory(double P, double wo, double T, double dzo,
     count++;
     
     /************** Data written to file **************************************/
-    std::ofstream OutFile("./data/RPLBAxial.dat", std::ios::out);
+    std::ofstream OutFile("./data/RPLB3D.dat", std::ios::out);
     OutFile.precision(16);
     for(int i=0 ; i<=count ; i++)
     {
@@ -192,7 +191,7 @@ void RPLB_3D_Trajectory(double P, double wo, double T, double dzo,
 }
 
 /******************************************************************************/
-double *RPLB_Phase_Scan(double P, double wo, double T, double dzo, 
+double *RPLB_Phase_Scan(double P, double wo, double T, double zf, double dzo, 
                        double lambda, double q, double m, double z0, double v0)
 {
     printf("Starting RPLB_Phase_Scan...\n");                   
@@ -226,24 +225,23 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double dzo,
     /************** Simulation paramaters initialization **********************/
     double y[2] = {z0,v0};
     double W;
-    double shift = 0.0;
-    double phi = 0.0+shift;
-    double phi_max = 2.0+shift;
-    int N = 21;
+    double phi_min = 0.0*Pi;
+    double phi_max = 2.0*Pi;
+    double phi = phi_min;
+    int N = 20;
     eqp.q = q;
     eqp.m = m;
-
+    
     /************** Phase scan ************************************************/
     std::ofstream OutFile("./data/RPLB_PhaseScan.dat", std::ios::out);
     OutFile.precision(16);
     while(phi < phi_max)
     {   
-        check_and_fix_phase(phi);
-        printf("Simulating for phi = %.2f PI\n",phi);
+        printf("Simulating for phi = %.2f PI\n",phi/Pi);
         while(sp.t < sp.tf)
         {
             /*********** Update laser beam and other parameters ***************/
-            Set_RPLB_Params(P,wo,T,dzo,lambda,phi*Pi,&bp);
+            Set_RPLB_Params(P,wo,T,zf,dzo,lambda,phi,&bp);
             eqp.Ez = RPLB_Axial_component(y[0],sp.t,bp);
             
             /*********** Accelerate and move particles ************************/
@@ -255,15 +253,16 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double dzo,
                sp.t*inv_fs,sp.tf*inv_fs);
             }
             total++;
+            printf("%f\n",y[1]);getchar();
         }
         
         /********** Prepare for the next step *********************************/
+        
         W = me_MeV/sqrt(1-y[1]*y[1]*inv_co_square);
         phase.push_back(phi);
         energy.push_back(W);
-        count++;
-        OutFile << phi << "\t" << W << "\n";
-        phi += 2.0/N;
+        OutFile << phi << "\t" << W << "\n"; count++;
+        phi += (phi_max-phi_min)/N;
         sp = sp_initial;
         y[0] = z0; 
         y[1] = v0;
@@ -281,16 +280,6 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double dzo,
 
 /******************************************************************************/
 /****************** Local functions implementation ****************************/
-/******************************************************************************/
-void check_and_fix_phase(double &phi)
-{
-     const double limit = 2.0e-2;
-     
-     if(phi < limit && phi > -limit) phi += 2.0*limit;
-     if(phi+1.0 < limit && phi+1.0 > -limit) phi += 2.0*limit;
-     if(phi-1.0 < limit && phi-1.0 > -limit) phi += 2.0*limit;
-}
-
 /******************************************************************************/
 double *Get_Optimums(std::vector<double> phase, 
                       std::vector<double> energy, int count)

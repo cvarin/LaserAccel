@@ -28,6 +28,7 @@ int main (void)
     double P = 100.0e12;
     double wo = 3.0e-6;
     double T = 10.0e-15;
+    double zf = 1.0;
     double dzo = -4.0*T*co;
     double lambda = 0.8e-6;
     double phio = 0.0*Pi;
@@ -37,12 +38,12 @@ int main (void)
     // |v| = sqrt(1 - (me_MeV*me_MeV)/(Wo*Wo))
     double q = q_e;
     double m = me_kg;
-    double r0 = 0.0; double z0 = 0.0;
+    double r0 = 0.0; double z0 = zf+0.0;
     double vr0 = 0.0; double vz0 = 0.0; 
     
-    //RPLB_Axial_Trajectory(P,wo,T,dzo,lambda,phio,q,m,z0,vz0,sp);
-    //RPLB_3D_Trajectory(P,wo,T,dzo,lambda,phio,q,m,r0,vr0,z0,vz0,sp);
-    OPT = RPLB_Phase_Scan(P,wo,T,dzo,lambda,q,m,z0,vz0);
+    //RPLB_Axial_Trajectory(P,wo,T,zf,dzo,lambda,phio,q,m,z0,vz0,sp);
+    //RPLB_3D_Trajectory(P,wo,T,zf,dzo,lambda,phio,q,m,r0,vr0,z0,vz0,sp);
+    OPT = RPLB_Phase_Scan(P,wo,T,zf,dzo,lambda,q,m,z0,vz0);
     
     printf("Optimal phase\n");
     printf("Phi_max = %f rad, W_max = %f MeV.\n",OPT[0],OPT[1]);
