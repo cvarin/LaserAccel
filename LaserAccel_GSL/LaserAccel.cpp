@@ -212,8 +212,8 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double zf, double dzo,
     
     /************** GSL Solver initialization *********************************/
     sp.t = 0.0, sp.tf = 20.0e-12; // Time box
-    sp.h = 2.0e-15;               // Starting stepsize 
-    sp.eps_abs = 1.0e-11;         // Absolute precision required
+    sp.h = 1.0e-15;               // Starting stepsize 
+    sp.eps_abs = 2.0e-11;         // Absolute precision required
     sp_initial = sp;
         
     const gsl_odeiv_step_type *type = gsl_odeiv_step_rk8pd;
@@ -225,23 +225,23 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double zf, double dzo,
     /************** Simulation paramaters initialization **********************/
     double y[2] = {z0,v0};
     double W;
-    double phi_min = 0.0*Pi;
-    double phi_max = 2.0*Pi;
+    double phi_min = 0.0;
+    double phi_max = 2.0;
     double phi = phi_min;
-    int N = 20;
+    int N = 100;
     eqp.q = q;
     eqp.m = m;
-    
+
     /************** Phase scan ************************************************/
     std::ofstream OutFile("./data/RPLB_PhaseScan.dat", std::ios::out);
     OutFile.precision(16);
     while(phi < phi_max)
     {   
-        printf("Simulating for phi = %.2f PI\n",phi/Pi);
+        printf("Simulating for phi = %.2f PI\n",phi);
         while(sp.t < sp.tf)
         {
             /*********** Update laser beam and other parameters ***************/
-            Set_RPLB_Params(P,wo,T,zf,dzo,lambda,phi,&bp);
+            Set_RPLB_Params(P,wo,T,zf,dzo,lambda,phi*Pi,&bp);
             eqp.Ez = RPLB_Axial_component(y[0],sp.t,bp);
             
             /*********** Accelerate and move particles ************************/
@@ -253,15 +253,14 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double zf, double dzo,
                sp.t*inv_fs,sp.tf*inv_fs);
             }
             total++;
-            printf("%f\n",y[1]);getchar();
         }
         
         /********** Prepare for the next step *********************************/
-        
         W = me_MeV/sqrt(1-y[1]*y[1]*inv_co_square);
         phase.push_back(phi);
         energy.push_back(W);
-        OutFile << phi << "\t" << W << "\n"; count++;
+        count++;
+        OutFile << phi << "\t" << W << "\n";
         phi += (phi_max-phi_min)/N;
         sp = sp_initial;
         y[0] = z0; 

@@ -46,8 +46,8 @@ int main (void)
     OPT = RPLB_Phase_Scan(P,wo,T,zf,dzo,lambda,q,m,z0,vz0);
     
     printf("Optimal phase\n");
-    printf("Phi_max = %f rad, W_max = %f MeV.\n",OPT[0],OPT[1]);
-    printf("Phi_min = %f rad, W_min = %f MeV.\n",OPT[2],OPT[3]);
+    printf("Phi_max = %f Pi rad, W_max = %f MeV.\n",OPT[0],OPT[1]);
+    printf("Phi_min = %f Pi rad, W_min = %f MeV.\n",OPT[2],OPT[3]);
     
     //RPLB_Transverse_Distribution(200,3.5,"./data/RPLB_components.dat");
     free(OPT);        
