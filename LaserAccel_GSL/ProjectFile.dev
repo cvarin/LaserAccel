@@ -15,8 +15,8 @@ CppCompiler=
 Linker=../../../../cygwin/lib/libgsl.a_@@_../../../../cygwin/lib/libgslcblas.a_@@_
 IsCpp=1
 Icon=
-ExeOutput=
-ObjectOutput=
+ExeOutput=.\
+ObjectOutput=.\
 OverrideOutput=0
 OverrideOutputName=GSLODE.exe
 HostApplication=
@@ -27,7 +27,7 @@ CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=0000000001010000000000
+CompilerSettings=0000000001001000000000
 
 [Unit1]
 FileName=Main.cpp

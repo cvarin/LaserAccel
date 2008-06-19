@@ -5,14 +5,14 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = Main.o LaserBeams/RPLBeam.o MotionEQs/LorentzForce.o LaserAccel.o $(RES)
-LINKOBJ  = Main.o LaserBeams/RPLBeam.o MotionEQs/LorentzForce.o LaserAccel.o $(RES)
+OBJ  = ./Main.o ./RPLBeam.o ./LorentzForce.o ./LaserAccel.o $(RES)
+LINKOBJ  = ./Main.o ./RPLBeam.o ./LorentzForce.o ./LaserAccel.o $(RES)
 LIBS =  ../../../../cygwin/lib/libgsl.a ../../../../cygwin/lib/libgslcblas.a  
 INCS =  -I"./LaserBeams"  -I"./"  -I"./MotionEQs" 
 CXXINCS =  -I"./LaserBeams"  -I"./"  -I"./MotionEQs" 
 BIN  = ProjectFile.exe
-CXXFLAGS = $(CXXINCS)   -fexpensive-optimizations -O2
-CFLAGS = $(INCS)   -fexpensive-optimizations -O2
+CXXFLAGS = $(CXXINCS)   -fexpensive-optimizations -O3
+CFLAGS = $(INCS)   -fexpensive-optimizations -O3
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
@@ -26,14 +26,14 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CPP) $(LINKOBJ) -o "ProjectFile.exe" $(LIBS)
 
-Main.o: Main.cpp
-	$(CPP) -c Main.cpp -o Main.o $(CXXFLAGS)
+./Main.o: Main.cpp
+	$(CPP) -c Main.cpp -o ./Main.o $(CXXFLAGS)
 
-LaserBeams/RPLBeam.o: LaserBeams/RPLBeam.cpp
-	$(CPP) -c LaserBeams/RPLBeam.cpp -o LaserBeams/RPLBeam.o $(CXXFLAGS)
+./RPLBeam.o: LaserBeams/RPLBeam.cpp
+	$(CPP) -c LaserBeams/RPLBeam.cpp -o ./RPLBeam.o $(CXXFLAGS)
 
-MotionEQs/LorentzForce.o: MotionEQs/LorentzForce.cpp
-	$(CPP) -c MotionEQs/LorentzForce.cpp -o MotionEQs/LorentzForce.o $(CXXFLAGS)
+./LorentzForce.o: MotionEQs/LorentzForce.cpp
+	$(CPP) -c MotionEQs/LorentzForce.cpp -o ./LorentzForce.o $(CXXFLAGS)
 
-LaserAccel.o: LaserAccel.cpp
-	$(CPP) -c LaserAccel.cpp -o LaserAccel.o $(CXXFLAGS)
+./LaserAccel.o: LaserAccel.cpp
+	$(CPP) -c LaserAccel.cpp -o ./LaserAccel.o $(CXXFLAGS)

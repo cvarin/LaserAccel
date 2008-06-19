@@ -29,9 +29,10 @@ double *Get_Optimums(std::vector<double> time,
 /******************************************************************************/
 void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo, 
                             double lambda, double phio, double q, double m,
-                             double z0, double v0, SolverParams &sp)
+                             double z0, double v0, SolverParams sp)
 {
     std::vector<double> time;
+    std::vector<double> position;
     std::vector<double> energy;                     
                              
     RPLB_Params bp;                         
@@ -40,10 +41,11 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo,
     int count = 0;
     int total = 0;
     int NEQ = 2; 
-    int FileFreq = 800;
+    int FileFreq = 600;
     int ScreenFreq = 500000;
     int status;
     double inv_fs = 1.0e15;
+    double inv_micron = 1.0e6;
     
     /************** GSL Solver initialization *********************************/
     const gsl_odeiv_step_type *type = gsl_odeiv_step_rk8pd;
@@ -61,7 +63,8 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo,
 
     /************** Time loop *************************************************/
     // Filling the first item of the output vectors
-    time.push_back(sp.t);
+    time.push_back(sp.t*inv_fs);
+    position.push_back((y[0]-zf)*inv_micron);
     energy.push_back(me_MeV/sqrt(1-y[1]*y[1]*inv_co_square));
     while(sp.t < sp.tf)
     {  
@@ -76,6 +79,7 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo,
        if(total%FileFreq == 0)
        {
           time.push_back(sp.t*inv_fs);
+          position.push_back((y[0]-zf)*inv_micron);
           energy.push_back(me_MeV/sqrt(1-y[1]*y[1]*inv_co_square));
           count++;
        }
@@ -88,6 +92,7 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo,
     }
     //Puts the last item in the output vectors
     time.push_back(sp.t*inv_fs);
+    position.push_back((y[0]-zf)*inv_micron);
     energy.push_back(me_MeV/sqrt(1-y[1]*y[1]*inv_co_square));
     count++;
     
@@ -97,6 +102,7 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo,
     for(int i=0 ; i<=count ; i++)
     {
         OutFile << time[i]  << "\t" 
+                << position[i] << "\t"
                 << energy[i]  << "\n";
     }
     OutFile.close();
@@ -111,7 +117,7 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo,
 void RPLB_3D_Trajectory(double P, double wo, double T, double zf, double dzo, 
                          double lambda, double phio, double q, double m,
                           double r0, double vr0, double z0, double vz0, 
-                           SolverParams &sp)
+                           SolverParams sp)
 {
     std::vector<double> time;
     std::vector<double> energy;                     
@@ -192,7 +198,8 @@ void RPLB_3D_Trajectory(double P, double wo, double T, double zf, double dzo,
 
 /******************************************************************************/
 double *RPLB_Phase_Scan(double P, double wo, double T, double zf, double dzo, 
-                       double lambda, double q, double m, double z0, double v0)
+                         double lambda, double q, double m, double z0, 
+                          double v0, SolverParams sp, int Npts)
 {
     printf("Starting RPLB_Phase_Scan...\n");                   
     std::vector<double> phase;
@@ -200,8 +207,7 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double zf, double dzo,
                              
     RPLB_Params bp;                         
     RPLB_SimParams_Axial eqp;
-    SolverParams sp;
-    SolverParams sp_initial;
+    SolverParams sp_initial = sp;
             
     int count = 0;
     int total = 0;
@@ -211,11 +217,6 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double zf, double dzo,
     double inv_fs = 1.0e15;
     
     /************** GSL Solver initialization *********************************/
-    sp.t = 0.0, sp.tf = 20.0e-12; // Time box
-    sp.h = 1.0e-15;               // Starting stepsize 
-    sp.eps_abs = 2.0e-11;         // Absolute precision required
-    sp_initial = sp;
-        
     const gsl_odeiv_step_type *type = gsl_odeiv_step_rk8pd;
     gsl_odeiv_step *s               = gsl_odeiv_step_alloc(type,NEQ);
     gsl_odeiv_control *c            = gsl_odeiv_control_y_new(sp.eps_abs,0.0);
@@ -227,16 +228,17 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double zf, double dzo,
     double W;
     double phi_min = 0.0;
     double phi_max = 2.0;
-    double phi = phi_min;
-    int N = 100;
+    double step = (phi_max-phi_min)/Npts;
+    double phi = phi_min - step;
     eqp.q = q;
     eqp.m = m;
 
     /************** Phase scan ************************************************/
-    std::ofstream OutFile("./data/RPLB_PhaseScan.dat", std::ios::out);
-    OutFile.precision(16);
+    FILE *file = fopen("./data/RPLB_PhaseScan.dat","w");
     while(phi < phi_max)
     {   
+        phi += step; 
+        if(phi > phi_max) phi = phi_max;
         printf("Simulating for phi = %.2f PI\n",phi);
         while(sp.t < sp.tf)
         {
@@ -260,14 +262,13 @@ double *RPLB_Phase_Scan(double P, double wo, double T, double zf, double dzo,
         phase.push_back(phi);
         energy.push_back(W);
         count++;
-        OutFile << phi << "\t" << W << "\n";
-        phi += (phi_max-phi_min)/N;
+        fprintf(file,"%e\t%e\n",phi,W);
         sp = sp_initial;
         y[0] = z0; 
         y[1] = v0;
         total = 0;
     }
-    OutFile.close();
+    fclose(file);
     
     /************** Memory is freed *******************************************/
     gsl_odeiv_evolve_free(e);
