@@ -5,6 +5,8 @@
                                                                                 
             Binds all equations of motion definitions
 
+            Note : Ponderomotive equations to come!!!!!!!!!!
+
 *******************************************************************************/
 
 #include "LorentzForce.hpp"

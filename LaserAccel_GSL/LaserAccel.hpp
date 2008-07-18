@@ -13,6 +13,10 @@ struct SolverParams
 };
 
 /****************** Accessible functions **************************************/
+void RPLB_Axial_MultiParticle(double P, double wo, double T, double zf, 
+                               double dzo, double lambda, double phio, double q, 
+                                double m, int N, double z0, double cw,
+                                 SolverParams sp);
 void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo, 
                             double lambda, double phio, double q, double m,
                              double z0, double v0, SolverParams sp);
