@@ -127,7 +127,7 @@ void RPLB_Axial_Trajectory(double P, double wo, double T, double zf, double dzo,
     int total = 0;
     int status;
     const int NEQ = 2; 
-    const int FileFreq = 600;
+    const int FileFreq = 899;
     const int ScreenFreq = 500000;
     const double inv_ps = 1.0e12;
     const double inv_fs = 1.0e15;
