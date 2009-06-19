@@ -6,17 +6,17 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-#include "nrutil.h"  /*En-têtes des routines du NR*/
+#include "nrutil.h"  /*En-tÃªtes des routines du NR*/
 
 #define co 2.99792458e8 /* Vitesse de la lumiere dans le vide (Codata)*/
 #define Pi 3.1415926535897932
 
-#define particule 0  /*Définitions utilisées par initialize.c*/
+#define particule 0  /*DÃ©finitions utilisÃ©es par initialize.c*/
 #define faisceau 1
 #define integrateur 2
 #define phase_initiale 3
 
-#define run 0  /*Définitions utilisées par notes.c*/
+#define run 0  /*DÃ©finitions utilisÃ©es par notes.c*/
 #define scan 1
 
 void odeint(double ystart[], int nvar, double x1, double x2,
