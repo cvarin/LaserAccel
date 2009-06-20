@@ -1,54 +1,47 @@
+################################################################################
+BIN  = stage1d.exe
+BUILD_DIR = ./build
+DATA_DIR  = ./output
+SRC_DIR   = ./src
+################### Fetch names ################################################
+SRC   = $(wildcard $(SRC_DIR)/*.c)
+xnames = $(subst $(SRC_DIR)/,,$(SRC))
+NAMES = $(subst .c,,$(xnames))
+HEADS = $(wildcard $(SRC_DIR)/*.h)
+OBJS  = $(addsuffix .o, $(NAMES))
+LINKS = $(addprefix $(BUILD_DIR)/,$(OBJS))
+DATA  = $(wildcard $(DATA_DIR)/*)
 
-CPP  = g++
-CC   = gcc
-RES  = 
-OBJ  = main.o rkqs_double.o initialize.o notes.o nrutil.o odeint_double.o rkck_double.o pzextr_double.o bsstep_double.o mmid_double.o $(RES)
-LINKOBJ  = main.o rkqs_double.o initialize.o notes.o nrutil.o odeint_double.o rkck_double.o pzextr_double.o bsstep_double.o mmid_double.o $(RES)
-LIBS =   
-INCS = 
-CXXINCS = 
-BIN  = Stage1D.exe
-CXXFLAGS = $(CXXINCS) -ansi   -traditional-cpp -fexpensive-optimizations -O3
-CFLAGS = $(INCS) -ansi   -traditional-cpp -fexpensive-optimizations -O3
-RM = rm -f
+################### Commands ###################################################
+CPP   = g++
+FLAGS = -O3
+RM    = rm -fr
 
-.PHONY: all all-before all-after clean clean-custom
+################### Compiling and linking ######################################
+all: $(BIN)
 
-all: all-before Stage1D.exe all-after
+$(BIN): $(LINKS)
+	$(CPP) $(LINKS) -o $(BIN) $(LIBS)
 
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CPP) $(FLAGS) -c $< -o $@
 
-clean: clean-custom
-	${RM} $(OBJ) $(BIN)
+################### Run ########################################################
+.PHONY: r run
+r: run
+run:
+	./$(BIN)
 
-$(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o "Stage1D.exe" $(LIBS)
+################### Clean ######################################################
+.PHONY: clean c
+c: clean
+clean:
+	${RM} $(LINKS) $(BIN) $(DATA)
 
-main.o: main.c
-	$(CPP) -c main.c -o main.o $(CXXFLAGS)
+.PHONY: clean_data cd
+cd: clean_data
+clean_data:
+	$(RM) $(DATA)
 
-rkqs_double.o: rkqs_double.c
-	$(CPP) -c rkqs_double.c -o rkqs_double.o $(CXXFLAGS)
+################### END of FILE ################################################
 
-initialize.o: initialize.c
-	$(CPP) -c initialize.c -o initialize.o $(CXXFLAGS)
-
-notes.o: notes.c
-	$(CPP) -c notes.c -o notes.o $(CXXFLAGS)
-
-nrutil.o: nrutil.c
-	$(CPP) -c nrutil.c -o nrutil.o $(CXXFLAGS)
-
-odeint_double.o: odeint_double.c
-	$(CPP) -c odeint_double.c -o odeint_double.o $(CXXFLAGS)
-
-rkck_double.o: rkck_double.c
-	$(CPP) -c rkck_double.c -o rkck_double.o $(CXXFLAGS)
-
-pzextr_double.o: pzextr_double.c
-	$(CPP) -c pzextr_double.c -o pzextr_double.o $(CXXFLAGS)
-
-bsstep_double.o: bsstep_double.c
-	$(CPP) -c bsstep_double.c -o bsstep_double.o $(CXXFLAGS)
-
-mmid_double.o: mmid_double.c
-	$(CPP) -c mmid_double.c -o mmid_double.o $(CXXFLAGS)

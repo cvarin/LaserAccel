@@ -2,8 +2,8 @@
   Name: initialize.c
   Author: Charles Varin
   Date: 08-12-05 10:43
-  Description: Initialisation des équations du mouvement 
-  et des paramètres de simulation.
+  Description: Initialisation des Ã©quations du mouvement 
+  et des paramÃ¨tres de simulation.
 */
 
 #include "MainHeader.h"
@@ -58,12 +58,12 @@ void derivs(double x,double y[],double dydx[])
     
 }
 
-void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
+void initialize(int n) /*Conditions initiales et paramÃ¨tres d'intÃ©gration*/
 {
  FILE *entree;
 
  switch(n){
-    case 0:if((entree = fopen("particule.arg", "r")) == NULL){
+    case 0:if((entree = fopen("./input/particule.arg", "r")) == NULL){
             printf("\nImpossible d\'ouvrir le fichier \'particule.arg\'\n\n");
             exit(1);}
         else{
@@ -76,7 +76,7 @@ void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
             vo = co*sqrt(1-((m_mev*m_mev)/(Wo*Wo)));
         break;
 
-    case 1:if((entree = fopen("faisceau.arg", "r")) == NULL){
+    case 1:if((entree = fopen("./input/faisceau.arg", "r")) == NULL){
             printf("\nImpossible d\'ouvrir le fichier \'faisceau.arg\'\n\n");
             exit(1);}
         else{
@@ -98,7 +98,7 @@ void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
         break;
 
     case 2:
-           if((entree = fopen("integrateur.arg", "r")) == NULL){
+           if((entree = fopen("./input/integrateur.arg", "r")) == NULL){
             printf("\nImpossible d\'ouvrir le fichier \'integrateur.arg\'\n\n");
             exit(1);}
             else
@@ -111,7 +111,7 @@ void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
         break;
     
     default:
-            printf("\nMauvais paramètres d\'initialisation...\n\n");
+            printf("\nMauvais paramÃ¨tres d\'initialisation...\n\n");
             exit(1);
     }
 }

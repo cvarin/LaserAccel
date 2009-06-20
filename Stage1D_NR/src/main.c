@@ -163,7 +163,7 @@ int main(void)
                     
                     /*******************************************************************/          
                     // écriture du fichier des résultats
-                    sortie = fopen("./trajectoire.dat", "w");
+                    sortie = fopen("./output/trajectoire.dat", "w");
                     // Premier point (à t = 0).
                     fprintf(sortie, "%.12f %.12f %.12f \n",
                                    x1*t_norm,          // Temps
@@ -194,8 +194,8 @@ int main(void)
                     nrhs=0;
                               
                     //Ouverture du fichier d'écriture des résultats
-                    sortie = fopen("./balayage.dat", "w");
-                    log = fopen("./balayage.log", "w");
+                    sortie = fopen("./output/balayage.dat", "w");
+                    log = fopen("./output/balayage.log", "w");
                               
                     //Boucle de balayage sur la phase
                     for(int st=0;st<=npt;st++)
