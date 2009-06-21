@@ -49,7 +49,8 @@ void derivs(double x,double y[],double dydx[])
     waist2 = 1/sqrt(1+(nz*nz)/(fac*fac));
     
     Ez1 = 2.0*A*(waist*waist)*impulsion*sin(omega*tprime+2*gouy-phase);
-    Ez2 = 2.0*A*(waist2*waist2)*impulsion2*sin(omega*tprime2+2*gouy+phase);
+//     Ez2 = 2.0*A*(waist2*waist2)*impulsion2*sin(omega*tprime2+2*gouy+phase);
+     Ez2 = 0.0;
     Ez = (Ez1+Ez2)/2.0;
     
     mag = sqrt(1-((y[2]*y[2])/(co*co)));
@@ -72,12 +73,12 @@ void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
                }
                else
                {
-                    resultat = fscanf(entree, "Energie (MeV): %lf", &Wo);
-                    resultat = fscanf(entree, "\nCharge (coulombs) : %lf", &q);
-                    resultat = fscanf(entree, "\n\nMasse (kg) : %lf", &m);
-                    resultat = fscanf(entree, "\n\n\nMasse (MeV) : %lf", &m_mev);
+                    resultat = fscanf(entree, "Energie (MeV): %lf\n", &Wo);
+                    resultat = fscanf(entree, "Charge (coulombs) : %lf\n", &q);
+                    resultat = fscanf(entree, "Masse (kg) : %lf\n", &m);
+                    resultat = fscanf(entree, "Masse (MeV) : %lf\n", &m_mev);
                     fclose(entree);
-               }
+               } 
                vo = co*sqrt(1-((m_mev*m_mev)/(Wo*Wo)));
           break;
 
@@ -89,12 +90,12 @@ void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
                }
                else
                {
-                    resultat = fscanf(entree, "Puissance (Watts) : %lf", &P);
-                    resultat = fscanf(entree, "\nLongueur d'onde (m) : %lf", &lambda);
-                    resultat = fscanf(entree, "\n\nPosition du foyer (m) : %lf", &zf);
-                    resultat = fscanf(entree, "\n\n\nDimension du faisceau au foyer (m) : %lf", &wo);
-                    resultat = fscanf(entree, "\n\n\n\nLargeur de l'impulsion (multiple de la periode) : %lf", &dT);
-                    resultat = fscanf(entree, "\n\n\n\n\nPhase (x Pi rads) : %lf", &phaseo);
+                    resultat = fscanf(entree, "Puissance (Watts) : %lf\n", &P);
+                    resultat = fscanf(entree, "Longueur d'onde (m) : %lf\n", &lambda);
+                    resultat = fscanf(entree, "Position du foyer (m) : %lf\n", &zf);
+                    resultat = fscanf(entree, "Dimension du faisceau au foyer (m) : %lf\n", &wo);
+                    resultat = fscanf(entree, "Largeur de l'impulsion (multiple de la periode) : %lf\n", &dT);
+                    resultat = fscanf(entree, "Phase (x Pi rads) : %lf", &phaseo);
                     fclose(entree);
                }
                ka = 2*Pi/lambda;
@@ -114,9 +115,9 @@ void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
                }
                else
                {
-                    resultat = fscanf(entree, "Precision (eps) : %lf", &eps);
-                    resultat = fscanf(entree, "\nPas de depart (h1) : %lf", &h1);
-                    resultat = fscanf(entree, "\n\nPas minimal permis (hmin) : %lf", &hmin);
+                    resultat = fscanf(entree, "Precision (eps) : %lf\n", &eps);
+                    resultat = fscanf(entree, "Pas de depart (h1) : %lf\n", &h1);
+                    resultat = fscanf(entree, "Pas minimal permis (hmin) : %lf", &hmin);
                     fclose(entree);
                }
           break;
