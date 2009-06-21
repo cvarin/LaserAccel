@@ -1,4 +1,4 @@
-/*
+     /*
   Name: main.c
   Author: Charles Varin
   Date: 07-12-05 21:56
@@ -58,11 +58,11 @@ int main(void)
      float t_norm = 1e9; // 1e9 = Temps en nanosecondes
      float z_norm = 1e3; // 1e3 = Position en millimètres
      // Note : l'énergie écrite dans les fichiers est toujours en MeV
-     
+     int status;
      while(option!=3)
      {
           /********* Initialisation de l'écran (vider l'écran) ************************/
-          system("clear"); // Si ça ne fonctionne pas, essayer system("cls");
+          status = system("clear"); // Si ça ne fonctionne pas, essayer system("cls");
           /****************************************************************************/
           
           /*************** Options affichées à l'écran ********************************/
@@ -198,7 +198,7 @@ int main(void)
                     log = fopen("./output/balayage.log", "w");
                               
                     //Boucle de balayage sur la phase
-                    for(int st=0;st<=npt;st++)
+                    for(unsigned int st=0;st<=npt;st++)
                     {
                          // Allocation de la mémoire
                          ystart=dvector(1,N);

@@ -14,16 +14,16 @@ DATA  = $(wildcard $(DATA_DIR)/*)
 
 ################### Commands ###################################################
 CPP   = g++
-FLAGS = -O3
+FLAGS = -fPIC -O3 -Wall
 RM    = rm -fr
 
 ################### Compiling and linking ######################################
 all: $(BIN)
 
-$(BIN): $(LINKS)
+$(BIN): $(LINKS) $(HEADS)
 	$(CPP) $(LINKS) -o $(BIN) $(LIBS)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADS)
 	$(CPP) $(FLAGS) -c $< -o $@
 
 ################### Run ########################################################

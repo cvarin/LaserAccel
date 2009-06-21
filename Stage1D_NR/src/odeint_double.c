@@ -17,7 +17,7 @@ void odeint(double ystart[], int nvar, double x1, double x2, double eps, double 
     double *, double *, void (*)(double, double [], double [])))
 {
     int nstp,i;
-    double xsav,x,hnext,hdid,h;
+    double xsav=0.0,x,hnext,hdid,h;
     double *yscal,*y,*dydx;
 
     yscal=dvector(1,nvar);

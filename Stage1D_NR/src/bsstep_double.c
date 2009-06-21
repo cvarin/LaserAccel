@@ -27,7 +27,7 @@ void bsstep(double y[], double dydx[], int nv, double *xx, double htry, double e
     int i,iq,k,kk,km;
     static int first=1,kmax,kopt;
     static double epsold = -1.0,xnew;
-    double eps1,errmax,fact,h,red,scale,work,wrkmin,xest;
+    double eps1,errmax,fact,h,red=0.0,scale=1.0,work,wrkmin,xest;
     double *err,*yerr,*ysav,*yseq;
     static double a[IMAXX+1];
     static double alf[KMAXX+1][KMAXX+1];

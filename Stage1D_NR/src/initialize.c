@@ -60,58 +60,70 @@ void derivs(double x,double y[],double dydx[])
 
 void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
 {
- FILE *entree;
+     FILE *entree;
+     int resultat;
+     switch(n)
+     {
+          case 0:
+               if((entree = fopen("./input/particule.arg", "r")) == NULL)
+               {
+                    printf("\nImpossible d\'ouvrir le fichier \'particule.arg\'\n\n");
+                    exit(1);
+               }
+               else
+               {
+                    resultat = fscanf(entree, "Energie (MeV): %lf", &Wo);
+                    resultat = fscanf(entree, "\nCharge (coulombs) : %lf", &q);
+                    resultat = fscanf(entree, "\n\nMasse (kg) : %lf", &m);
+                    resultat = fscanf(entree, "\n\n\nMasse (MeV) : %lf", &m_mev);
+                    fclose(entree);
+               }
+               vo = co*sqrt(1-((m_mev*m_mev)/(Wo*Wo)));
+          break;
 
- switch(n){
-    case 0:if((entree = fopen("./input/particule.arg", "r")) == NULL){
-            printf("\nImpossible d\'ouvrir le fichier \'particule.arg\'\n\n");
-            exit(1);}
-        else{
-            fscanf(entree, "Energie (MeV): %lf", &Wo);
-            fscanf(entree, "\nCharge (coulombs) : %lf", &q);
-            fscanf(entree, "\n\nMasse (kg) : %lf", &m);
-            fscanf(entree, "\n\n\nMasse (MeV) : %lf", &m_mev);
-            fclose(entree);
-            }
-            vo = co*sqrt(1-((m_mev*m_mev)/(Wo*Wo)));
-        break;
+          case 1:
+               if((entree = fopen("./input/faisceau.arg", "r")) == NULL)
+               {
+                    printf("\nImpossible d\'ouvrir le fichier \'faisceau.arg\'\n\n");
+                    exit(1);
+               }
+               else
+               {
+                    resultat = fscanf(entree, "Puissance (Watts) : %lf", &P);
+                    resultat = fscanf(entree, "\nLongueur d'onde (m) : %lf", &lambda);
+                    resultat = fscanf(entree, "\n\nPosition du foyer (m) : %lf", &zf);
+                    resultat = fscanf(entree, "\n\n\nDimension du faisceau au foyer (m) : %lf", &wo);
+                    resultat = fscanf(entree, "\n\n\n\nLargeur de l'impulsion (multiple de la periode) : %lf", &dT);
+                    resultat = fscanf(entree, "\n\n\n\n\nPhase (x Pi rads) : %lf", &phaseo);
+                    fclose(entree);
+               }
+               ka = 2*Pi/lambda;
+               omega = ka*co;
+               z_rayleigh = ka*(wo*wo)/2;
+               Imax = 2*P/(Pi*exp(1)*wo*wo);
+               Eo = sqrt(2*120*Pi*Imax);
+               A = 0.371*lambda/wo*Eo;
+               T = dT*2*Pi/omega;
+          break;
 
-    case 1:if((entree = fopen("./input/faisceau.arg", "r")) == NULL){
-            printf("\nImpossible d\'ouvrir le fichier \'faisceau.arg\'\n\n");
-            exit(1);}
-        else{
-            fscanf(entree, "Puissance (Watts) : %lf", &P);
-            fscanf(entree, "\nLongueur d'onde (m) : %lf", &lambda);
-            fscanf(entree, "\n\nPosition du foyer (m) : %lf", &zf);
-            fscanf(entree, "\n\n\nDimension du faisceau au foyer (m) : %lf", &wo);
-            fscanf(entree, "\n\n\n\nLargeur de l'impulsion (multiple de la periode) : %lf", &dT);
-            fscanf(entree, "\n\n\n\n\nPhase (x Pi rads) : %lf", &phaseo);
-            fclose(entree);
-            }
-            ka = 2*Pi/lambda;
-            omega = ka*co;
-            z_rayleigh = ka*(wo*wo)/2;
-            Imax = 2*P/(Pi*exp(1)*wo*wo);
-            Eo = sqrt(2*120*Pi*Imax);
-            A = 0.371*lambda/wo*Eo;
-            T = dT*2*Pi/omega;
-        break;
-
-    case 2:
-           if((entree = fopen("./input/integrateur.arg", "r")) == NULL){
-            printf("\nImpossible d\'ouvrir le fichier \'integrateur.arg\'\n\n");
-            exit(1);}
-            else
-            {
-             fscanf(entree, "Precision (eps) : %lf", &eps);
-             fscanf(entree, "\nPas de depart (h1) : %lf", &h1);
-             fscanf(entree, "\n\nPas minimal permis (hmin) : %lf", &hmin);
-             fclose(entree);
-            }
-        break;
+          case 2:
+               if((entree = fopen("./input/integrateur.arg", "r")) == NULL)
+               {
+                    printf("\nImpossible d\'ouvrir le fichier \'integrateur.arg\'\n\n");
+                    exit(1);
+               }
+               else
+               {
+                    resultat = fscanf(entree, "Precision (eps) : %lf", &eps);
+                    resultat = fscanf(entree, "\nPas de depart (h1) : %lf", &h1);
+                    resultat = fscanf(entree, "\n\nPas minimal permis (hmin) : %lf", &hmin);
+                    fclose(entree);
+               }
+          break;
     
-    default:
-            printf("\nMauvais paramètres d\'initialisation...\n\n");
-            exit(1);
+          default:
+               printf("\nMauvais paramètres d\'initialisation...\n\n");
+               exit(1);
+          break;
     }
 }
