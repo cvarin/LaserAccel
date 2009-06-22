@@ -11,11 +11,6 @@
 #define co 2.99792458e8 /* Vitesse de la lumiere dans le vide (Codata)*/
 #define Pi 3.1415926535897932
 
-#define particule 0  /*Définitions utilisées par initialize.c*/
-#define faisceau 1
-#define integrateur 2
-#define phase_initiale 3
-
 #define run 0  /*Définitions utilisées par notes.c*/
 #define scan 1
 
@@ -42,7 +37,7 @@ void pzextr(int iest, double xest, double yest[], double yz[], double dy[],
     int nv);
 
 void derivs(double x,double y[],double dydx[]);
-void initialize(int n);
-void notes();
+void readfile(const char *inputfile);
+void notes(const char *notefile);
 
 #endif /* _MainHeader_H_ */

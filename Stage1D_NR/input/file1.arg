@@ -1,0 +1,18 @@
+# Paramètres du faisceau
+Puissance (Watts) : 200e12
+Longueur d'onde (m) : 0.8e-6
+Position du foyer (m) : 1
+Dimension du faisceau au foyer (m) : 3e-6
+Largeur de l'impulsion (multiple de la periode) : 3.75
+Phase (x Pi rads) : 1.5
+
+# Paramètres de la particule
+Energie (MeV): 30.0
+Charge (coulombs) : -1.602176e-19
+Masse (kg) : 9.109381e-031
+Masse (MeV) : 0.511
+
+# Paramètres de l'intégrateur
+Precision (eps) : 1.0e-10
+Pas de depart (h1) : 1.0e-12
+Pas minimal permis (hmin) : 0.0

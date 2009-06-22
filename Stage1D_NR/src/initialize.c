@@ -59,72 +59,51 @@ void derivs(double x,double y[],double dydx[])
     
 }
 
-void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
+
+void readfile(const char *inputfile)
 {
-     FILE *entree;
+     FILE *entree = fopen(inputfile, "r");
      int resultat;
-     switch(n)
+      
+     if(entree == NULL)
      {
-          case 0:
-               if((entree = fopen("./input/particule.arg", "r")) == NULL)
-               {
-                    printf("\nImpossible d\'ouvrir le fichier \'particule.arg\'\n\n");
-                    exit(1);
-               }
-               else
-               {
-                    resultat = fscanf(entree, "Energie (MeV): %lf\n", &Wo);
-                    resultat = fscanf(entree, "Charge (coulombs) : %lf\n", &q);
-                    resultat = fscanf(entree, "Masse (kg) : %lf\n", &m);
-                    resultat = fscanf(entree, "Masse (MeV) : %lf\n", &m_mev);
-                    fclose(entree);
-               } 
-               vo = co*sqrt(1-((m_mev*m_mev)/(Wo*Wo)));
-          break;
-
-          case 1:
-               if((entree = fopen("./input/faisceau.arg", "r")) == NULL)
-               {
-                    printf("\nImpossible d\'ouvrir le fichier \'faisceau.arg\'\n\n");
-                    exit(1);
-               }
-               else
-               {
-                    resultat = fscanf(entree, "Puissance (Watts) : %lf\n", &P);
-                    resultat = fscanf(entree, "Longueur d'onde (m) : %lf\n", &lambda);
-                    resultat = fscanf(entree, "Position du foyer (m) : %lf\n", &zf);
-                    resultat = fscanf(entree, "Dimension du faisceau au foyer (m) : %lf\n", &wo);
-                    resultat = fscanf(entree, "Largeur de l'impulsion (multiple de la periode) : %lf\n", &dT);
-                    resultat = fscanf(entree, "Phase (x Pi rads) : %lf", &phaseo);
-                    fclose(entree);
-               }
-               ka = 2*Pi/lambda;
-               omega = ka*co;
-               z_rayleigh = ka*(wo*wo)/2;
-               Imax = 2*P/(Pi*exp(1)*wo*wo);
-               Eo = sqrt(2*120*Pi*Imax);
-               A = 0.371*lambda/wo*Eo;
-               T = dT*2*Pi/omega;
-          break;
-
-          case 2:
-               if((entree = fopen("./input/integrateur.arg", "r")) == NULL)
-               {
-                    printf("\nImpossible d\'ouvrir le fichier \'integrateur.arg\'\n\n");
-                    exit(1);
-               }
-               else
-               {
-                    resultat = fscanf(entree, "Precision (eps) : %lf\n", &eps);
-                    resultat = fscanf(entree, "Pas de depart (h1) : %lf\n", &h1);
-                    resultat = fscanf(entree, "Pas minimal permis (hmin) : %lf", &hmin);
-                    fclose(entree);
-               }
-          break;
-    
-          default:
-               printf("\nMauvais paramètres d\'initialisation...\n\n");
-               exit(1);
-          break;
-    }
+          printf("\nImpossible d\'ouvrir le fichier \'%s\'\n\n",inputfile);
+          exit(1);
+     }
+     else
+     {    
+          resultat = fscanf(entree, "# Paramètres du faisceau\n");
+          resultat = fscanf(entree, "Puissance (Watts) : %lf\n", &P);
+          resultat = fscanf(entree, "Longueur d'onde (m) : %lf\n", &lambda);
+          resultat = fscanf(entree, "Position du foyer (m) : %lf\n", &zf);
+          resultat = fscanf(entree, "Dimension du faisceau au foyer (m) : %lf\n", &wo);
+          resultat = fscanf(entree, "Largeur de l'impulsion (multiple de la periode) : %lf\n", &dT);
+          resultat = fscanf(entree, "Phase (x Pi rads) : %lf\n", &phaseo);
+          
+          resultat = fscanf(entree, "# Paramètres de la particule\n");
+          resultat = fscanf(entree, "Energie (MeV): %lf\n", &Wo);
+          resultat = fscanf(entree, "Charge (coulombs) : %lf\n", &q);
+          resultat = fscanf(entree, "Masse (kg) : %lf\n", &m);
+          resultat = fscanf(entree, "Masse (MeV) : %lf\n", &m_mev);
+          
+          resultat = fscanf(entree, "# Paramètres de l\'intégrateur\n");
+          resultat = fscanf(entree, "Precision (eps) : %lf\n", &eps);
+          resultat = fscanf(entree, "Pas de depart (h1) : %lf\n", &h1);
+          resultat = fscanf(entree, "Pas minimal permis (hmin) : %lf\n", &hmin);
+          
+          fclose(entree);
+     } 
+     // Paramètres du faisceau
+     ka = 2*Pi/lambda;
+     omega = ka*co;
+     z_rayleigh = ka*(wo*wo)/2;
+     Imax = 2*P/(Pi*exp(1)*wo*wo);
+     Eo = sqrt(2*120*Pi*Imax);
+     A = 0.371*lambda/wo*Eo;
+     T = dT*2*Pi/omega;
+     
+     // Paramètre de la particule
+     vo = co*sqrt(1-((m_mev*m_mev)/(Wo*Wo)));
 }
+
+

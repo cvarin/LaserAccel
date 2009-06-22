@@ -32,6 +32,12 @@ int nrhs;
 
 int sleep_time = 1;
 
+const char *inputfile  = "./input/file1.arg";
+const char *output1    = "./output/trajectoire.dat";
+const char *output2    = "./output/balayage.dat";
+const char *output_log = "./output/balayage.log";
+const char *notefile   = "./output/notes.txt";
+
 /******************************************************************************/
 int main(void)
 {
@@ -86,9 +92,7 @@ int main(void)
                     case 2:     
                          // Initialization des paramètres de la simulations
                          // à spécifier dans les fichiers se terminant par .arg
-                         initialize(particule);
-                         initialize(faisceau);      
-                         initialize(integrateur);
+                         readfile(inputfile);
                          
                          if (Wo < 0.511)
                          { 
@@ -163,7 +167,7 @@ int main(void)
                     
                     /*******************************************************************/          
                     // écriture du fichier des résultats
-                    sortie = fopen("./output/trajectoire.dat", "w");
+                    sortie = fopen(output1, "w");
                     // Premier point (à t = 0).
                     fprintf(sortie, "%.12f %.12f %.12f \n",
                                    x1*t_norm,          // Temps
@@ -180,7 +184,7 @@ int main(void)
                     fclose(sortie);
                     /*******************************************************************/          
                     // écriture du fichier de notes
-                    notes();
+                    notes(notefile);
           
                     // Désallocation de la mémoire
                     free_dmatrix(yp,1,N,1,kmax);
@@ -194,8 +198,8 @@ int main(void)
                     nrhs=0;
                               
                     //Ouverture du fichier d'écriture des résultats
-                    sortie = fopen("./output/balayage.dat", "w");
-                    log = fopen("./output/balayage.log", "w");
+                    sortie = fopen(output2, "w");
+                    log = fopen(output_log, "w");
                               
                     //Boucle de balayage sur la phase
                     for(unsigned int st=0;st<=npt;st++)
@@ -230,7 +234,7 @@ int main(void)
                          fprintf(sortie, "%.12f %.12f \n", phase/Pi, 
                          m_mev/sqrt(1-((yp[2][kount]*yp[2][kount])/(co*co)))-Wo );
                                         
-                         notes();
+                         notes(notefile);
                
                          free_dmatrix(yp,1,N,1,kmax);
                          free_dvector(xp,1,kmax);

@@ -13,11 +13,9 @@ extern double *xp,**yp,dxsav;
 
 extern int nrhs;
 
-void notes(){
-
-    FILE *sortie;
-    
-    sortie = fopen("./output/notes.txt", "w");
+void notes(const char *notefile)
+{
+    FILE *sortie = fopen(notefile, "w");
 
     fprintf(sortie, "\nParamètres du faisceau\n\n");
     fprintf(sortie, "Puissance : %g W\n", P);
