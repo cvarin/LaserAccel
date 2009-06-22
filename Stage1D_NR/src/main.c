@@ -7,9 +7,8 @@
   Tout est en unité MKS.
 */
 
-#include <iostream>  
-#include <string>
 #include <cstdlib>
+#include <string>
 
 // Les en-têtes du programme sont appellées ici
 #include "MainHeader.h"
@@ -30,7 +29,7 @@ int kmax,kount;
 double *xp,**yp,dxsav;
 int nrhs;
 
-int sleep_time = 1;
+const int sleep_time = 1;
 
 const char *inputfile  = "./input/file1.arg";
 const char *output1    = "./output/trajectoire.dat";
@@ -49,26 +48,27 @@ int main(void)
      
      int recouv;
      int option;
-     float position;
+     double position;
      
      // Paramètres utilisés pour le balayage de la phase
-     float phasei = 0.0;
-     float phasef = 2.0;
-     unsigned int npt = 100;
+     const double phasei = 0.0;
+     const double phasef = 2.0;
+     const int npt = 100;
      
      // Paramètre utilisé par la fonction odeint du Numerical Recipes
      kmax=200000;
      dxsav=(x2-x1)/1e2;
      
      // Paramètres de normalisation du temps et de la position de l'électron
-     float t_norm = 1e9; // 1e9 = Temps en nanosecondes
-     float z_norm = 1e3; // 1e3 = Position en millimètres
+     const double t_norm = 1.0e9; // 1e9 = Temps en nanosecondes
+     const double z_norm = 1.0e3; // 1e3 = Position en millimètres
      // Note : l'énergie écrite dans les fichiers est toujours en MeV
-     int status;
      while(option!=3)
      {
+          int status;
           /********* Initialisation de l'écran (vider l'écran) ************************/
           status = system("clear"); // Si ça ne fonctionne pas, essayer system("cls");
+          assert(!status);
           /****************************************************************************/
           
           /*************** Options affichées à l'écran ********************************/
@@ -80,61 +80,25 @@ int main(void)
           std::cin  >> option;
           std::cout << std::endl;
           
-          /****************************************************************************/
-          /** Si l'option 3 (Quitter) n'est pas choisie, initialiser les variables ****/
-          /****************************************************************************/
+          /******** Initialisation des paramètres de la simulation ********************/
           if(option!=3)
           {
-               switch(option)
-               {
-                    /***********************************************************************/
-                    case 1:
-                    case 2:     
-                         // Initialization des paramètres de la simulations
-                         // à spécifier dans les fichiers se terminant par .arg
-                         readfile(inputfile);
-                         
-                         if (Wo < 0.511)
-                         { 
-                              std::cout << "Attention! ";
-                              std::cout << "L'énergie initiale de l'électron doit être ";
-                              std::cout << "égale ou supérieure à l'énergie de masse. ";
-                              std::cout << "(0.511 = au repos)" << std::endl;
-                              std::cout << "Corriger et redémarrer.";
-                              sleep(3);
-                              exit(EXIT_FAILURE);
-                         }
-                         
-                         if (Wo == 0.511)
-                         {
-                              std::cout << "Le code n'a pas été développé pour ";
-                              std::cout << "traiter la cas d'un électron au repos.";
-                              std::cout << std::endl;
-                              std::cout << "Corriger et redémarrer." << std::endl;
-                              sleep(3);
-                              exit(EXIT_FAILURE);
-                         }
-                         
-                         std::cout << "Point de rencontre (en unités de zR)";
-                         std::cout << std::endl;
-                         std::cout << "(valeur précédente:" << position << "):";
-                         std::cin  >> position;
-                         std::cout << std::endl;
-                              
-                         recouv = 8;
-                         zinter = position*z_rayleigh;               
-                         zini=-(recouv*vo*T/(1-vo/co)-zinter);   //Position initiale relative
-                         zpo=-(recouv*co*T/(1-vo/co)-zinter);    //Position initiale du centre de l'impulsion
-                              
-                         // Temps de la simulation
-                         x1 = 0.0;
-                         x2 = 2.0*(-zpo)/co;
-                         
-                    break;
-                    /**********************************************************************/          
-                    default: 
-                    break;
-               }
+               readfile(inputfile);
+               
+               std::cout << "Point de rencontre (en unités de zR)";
+               std::cout << std::endl;
+               std::cout << "(valeur précédente:" << position << "):";
+               std::cin  >> position;
+               std::cout << std::endl;
+                    
+               recouv = 8;
+               zinter = position*z_rayleigh;               
+               zini=-(recouv*vo*T/(1-vo/co)-zinter);   //Position initiale relative
+               zpo=-(recouv*co*T/(1-vo/co)-zinter);    //Position initiale du centre de l'impulsion
+                    
+               // Temps de la simulation
+               x1 = 0.0;
+               x2 = 2.0*(-zpo)/co;
           }
      
           /****************************************************************************/               
@@ -202,7 +166,7 @@ int main(void)
                     log = fopen(output_log, "w");
                               
                     //Boucle de balayage sur la phase
-                    for(unsigned int st=0;st<=npt;st++)
+                    for(int st=0;st<=npt;st++)
                     {
                          // Allocation de la mémoire
                          ystart=dvector(1,N);

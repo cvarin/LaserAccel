@@ -1,6 +1,8 @@
 #ifndef _MainHeader_H_
 #define _MainHeader_H_
 
+#include <cassert>
+#include <iostream>  
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>

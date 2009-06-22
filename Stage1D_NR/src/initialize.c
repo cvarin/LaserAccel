@@ -63,7 +63,8 @@ void derivs(double x,double y[],double dydx[])
 void readfile(const char *inputfile)
 {
      FILE *entree = fopen(inputfile, "r");
-     int resultat;
+     const int nparams = 16;
+     int resultat[16];
       
      if(entree == NULL)
      {
@@ -72,24 +73,26 @@ void readfile(const char *inputfile)
      }
      else
      {    
-          resultat = fscanf(entree, "# Paramètres du faisceau\n");
-          resultat = fscanf(entree, "Puissance (Watts) : %lf\n", &P);
-          resultat = fscanf(entree, "Longueur d'onde (m) : %lf\n", &lambda);
-          resultat = fscanf(entree, "Position du foyer (m) : %lf\n", &zf);
-          resultat = fscanf(entree, "Dimension du faisceau au foyer (m) : %lf\n", &wo);
-          resultat = fscanf(entree, "Largeur de l'impulsion (multiple de la periode) : %lf\n", &dT);
-          resultat = fscanf(entree, "Phase (x Pi rads) : %lf\n", &phaseo);
+          resultat[0] = !fscanf(entree, "# Paramètres du faisceau\n");
+          resultat[1] = fscanf(entree, "Puissance (Watts) : %lf\n", &P);
+          resultat[2] = fscanf(entree, "Longueur d'onde (m) : %lf\n", &lambda);
+          resultat[3] = fscanf(entree, "Position du foyer (m) : %lf\n", &zf);
+          resultat[4] = fscanf(entree, "Dimension du faisceau au foyer (m) : %lf\n", &wo);
+          resultat[5] = fscanf(entree, "Largeur de l'impulsion (multiple de la periode) : %lf\n", &dT);
+          resultat[6] = fscanf(entree, "Phase (x Pi rads) : %lf\n", &phaseo);
           
-          resultat = fscanf(entree, "# Paramètres de la particule\n");
-          resultat = fscanf(entree, "Energie (MeV): %lf\n", &Wo);
-          resultat = fscanf(entree, "Charge (coulombs) : %lf\n", &q);
-          resultat = fscanf(entree, "Masse (kg) : %lf\n", &m);
-          resultat = fscanf(entree, "Masse (MeV) : %lf\n", &m_mev);
+          resultat[7]  = !fscanf(entree, "# Paramètres de la particule\n");
+          resultat[8]  = fscanf(entree, "Energie (MeV): %lf\n", &Wo);
+          resultat[9]  = fscanf(entree, "Charge (coulombs) : %lf\n", &q);
+          resultat[10] = fscanf(entree, "Masse (kg) : %lf\n", &m);
+          resultat[11] = fscanf(entree, "Masse (MeV) : %lf\n", &m_mev);
           
-          resultat = fscanf(entree, "# Paramètres de l\'intégrateur\n");
-          resultat = fscanf(entree, "Precision (eps) : %lf\n", &eps);
-          resultat = fscanf(entree, "Pas de depart (h1) : %lf\n", &h1);
-          resultat = fscanf(entree, "Pas minimal permis (hmin) : %lf\n", &hmin);
+          resultat[12] = !fscanf(entree, "# Paramètres de l\'intégrateur\n");
+          resultat[13] = fscanf(entree, "Precision (eps) : %lf\n", &eps);
+          resultat[14] = fscanf(entree, "Pas de depart (h1) : %lf\n", &h1);
+          resultat[15] = fscanf(entree, "Pas minimal permis (hmin) : %lf\n", &hmin);
+          
+          for(int i=nparams;i--;) assert(resultat[i]);
           
           fclose(entree);
      } 
@@ -104,6 +107,28 @@ void readfile(const char *inputfile)
      
      // Paramètre de la particule
      vo = co*sqrt(1-((m_mev*m_mev)/(Wo*Wo)));
+     
+     // Vérification d'usage
+     if (Wo < 0.511)
+     { 
+          std::cout << "Attention! ";
+          std::cout << "L'énergie initiale de l'électron doit être ";
+          std::cout << "égale ou supérieure à l'énergie de masse. ";
+          std::cout << "(0.511 = au repos)" << std::endl;
+          std::cout << "Corriger et redémarrer.";
+          sleep(1);
+          exit(EXIT_FAILURE);
+     }
+     
+     if (Wo == 0.511)
+     {
+          std::cout << "Le code n'a pas été développé pour ";
+          std::cout << "traiter la cas d'un électron au repos.";
+          std::cout << std::endl;
+          std::cout << "Corriger et redémarrer." << std::endl;
+          sleep(1);
+          exit(EXIT_FAILURE);
+     }
 }
 
 
