@@ -8,7 +8,7 @@
 
 #include "MainHeader.h"
 
-extern double Wo,q,m,m_mev,vo,zini,zinter;
+extern double Wo,q,m,m_mev,vo,position,zini,zinter;
 extern double P,Imax,lambda,zf,wo,dT,zpo;
 extern double ka,omega,z_rayleigh,Eo,A,T;
 extern double eps,h1,hmin,x1,x2;
@@ -63,8 +63,8 @@ void derivs(double x,double y[],double dydx[])
 void readfile(const char *inputfile)
 {
      FILE *entree = fopen(inputfile, "r");
-     const int nparams = 16;
-     int resultat[16];
+     const int nparams = 17;
+     int resultat[nparams];
       
      if(entree == NULL)
      {
@@ -86,11 +86,12 @@ void readfile(const char *inputfile)
           resultat[9]  = fscanf(entree, "Charge (coulombs) : %lf\n", &q);
           resultat[10] = fscanf(entree, "Masse (kg) : %lf\n", &m);
           resultat[11] = fscanf(entree, "Masse (MeV) : %lf\n", &m_mev);
+          resultat[12] = fscanf(entree, "Point de rencontre (zR) : %lf\n", &position);
           
-          resultat[12] = !fscanf(entree, "# Paramètres de l\'intégrateur\n");
-          resultat[13] = fscanf(entree, "Precision (eps) : %lf\n", &eps);
-          resultat[14] = fscanf(entree, "Pas de depart (h1) : %lf\n", &h1);
-          resultat[15] = fscanf(entree, "Pas minimal permis (hmin) : %lf\n", &hmin);
+          resultat[13] = !fscanf(entree, "# Paramètres de l\'intégrateur\n");
+          resultat[14] = fscanf(entree, "Precision (eps) : %lf\n", &eps);
+          resultat[15] = fscanf(entree, "Pas de depart (h1) : %lf\n", &h1);
+          resultat[16] = fscanf(entree, "Pas minimal permis (hmin) : %lf\n", &hmin);
           
           for(int i=nparams;i--;) assert(resultat[i]);
           

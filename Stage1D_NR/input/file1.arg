@@ -11,6 +11,7 @@ Energie (MeV): 30.0
 Charge (coulombs) : -1.602176e-19
 Masse (kg) : 9.109381e-031
 Masse (MeV) : 0.511
+Point de rencontre (zR) : 0.0
 
 # Paramètres de l'intégrateur
 Precision (eps) : 1.0e-10
