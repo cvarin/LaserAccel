@@ -11,6 +11,8 @@
 extern double Wo,q,m,m_mev,vo,position,zini,zinter;
 extern double P,Imax,lambda,zf,wo,dT,zpo;
 extern double ka,omega,z_rayleigh,Eo,A,T;
+extern double Pini,Pfin;
+extern int    Np;
 extern double eps,h1,hmin,x1,x2;
 extern double phaseo;
 extern double dz,nz,tprime,impulsion,waist,gouy,coeff;
@@ -56,14 +58,13 @@ void derivs(double x,double y[],double dydx[])
     mag = sqrt(1-((y[2]*y[2])/(co*co)));
     dydx[1] = y[2];
     dydx[2] = q/m*mag*(1-((y[2]*y[2])/(co*co)))*Ez;
-    
 }
 
 
 void readfile(const char *inputfile)
 {
      FILE *entree = fopen(inputfile, "r");
-     const int nparams = 17;
+     const int nparams = 21;
      int resultat[nparams];
       
      if(entree == NULL)
@@ -88,10 +89,15 @@ void readfile(const char *inputfile)
           resultat[11] = fscanf(entree, "Masse (MeV) : %lf\n", &m_mev);
           resultat[12] = fscanf(entree, "Point de rencontre (zR) : %lf\n", &position);
           
-          resultat[13] = !fscanf(entree, "# Paramètres de l\'intégrateur\n");
-          resultat[14] = fscanf(entree, "Precision (eps) : %lf\n", &eps);
-          resultat[15] = fscanf(entree, "Pas de depart (h1) : %lf\n", &h1);
-          resultat[16] = fscanf(entree, "Pas minimal permis (hmin) : %lf\n", &hmin);
+          resultat[13] = !fscanf(entree, "# Paramètres du scan d'intensité\n");
+          resultat[14] = fscanf(entree, "Puissance initiale (Watts) : %lf\n", &Pini);
+          resultat[15] = fscanf(entree, "Puissance finale (Watts) : %lf\n", &Pfin);
+          resultat[16] = fscanf(entree, "Nombre de points : %d\n", &Np);
+          
+          resultat[17] = !fscanf(entree, "# Paramètres de l\'intégrateur\n");
+          resultat[18] = fscanf(entree, "Precision (eps) : %lf\n", &eps);
+          resultat[19] = fscanf(entree, "Pas de depart (h1) : %lf\n", &h1);
+          resultat[20] = fscanf(entree, "Pas minimal permis (hmin) : %lf\n", &hmin);
           
           for(int i=nparams;i--;) assert(resultat[i]);
           

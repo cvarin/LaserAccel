@@ -20,6 +20,8 @@
 double Wo,q,m,m_mev,vo,position,zini,zinter;
 double P,Imax,lambda,zf,wo,dT,zpo;
 double ka,omega,z_rayleigh,Eo,A,T;
+double Pini,Pfin;
+int    Np;
 double eps,h1,hmin,x1,x2;
 double phaseo;
 double dz,nz,tprime,impulsion,waist,gouy,coeff;
@@ -35,16 +37,20 @@ const int sleep_time = 1;
 const double t_norm = 1.0e9; // 1e9 = Temps en nanosecondes
 const double z_norm = 1.0e3; // 1e3 = Position en millimètres
 
+const char maxchar = 90;
+
+const char *outputfolder = "./output/";
 const char *inputfile  = "./input/file1.arg";
 const char *output1    = "./output/trajectoire.dat";
-const char *output2    = "./output/balayage.dat";
-const char *output_log = "./output/balayage.log";
 const char *notefile   = "./output/notes.txt";
 
 /******************************************************************************/     
+inline void print_dashes(void){std::cout << "------------------------------------------------------\n";};
+inline void print_stars(void){std::cout <<  "******************************************************\n";};
 void calculate_trajectory(void);
-double *Get_Optimums(double *phase, double *energy, int count);
+double *Get_Optimums(double *phase, double *energy, int count);
 double *phase_scan(void);
+void power_scan(void);
 
 /******************************************************************************/
 int main(void)
@@ -62,7 +68,7 @@ int main(void)
      {    
           /*************** Options affichées à l'écran ********************************/
           std::cout << std::endl;
-          std::cout << "******************************************************";
+          print_stars();
           std::cout << "\nOptions possibles:\n\n"
                     << "1. Trajectoire\n"
                     << "2. Balayage de la phase\n"
@@ -92,19 +98,17 @@ int main(void)
           switch(option)
           {            
                case 1: calculate_trajectory (); break;
-               case 2: OPT = phase_scan();
-                       puts("");
+               case 2: print_dashes();
+                       OPT = phase_scan();
                        puts("Valeurs optimales du balayage de la phase");
-                       printf("Max: W = %g MeV à phase = %g*pi\n",OPT[1],OPT[0]);
-                       printf("Min: W = %g MeV à phase = %g*pi\n",OPT[3],OPT[2]);
-               case 3: 
-                       printf("Balayage de l\'intensité à programmer.\n");
+                       printf("Max: W = %g MeV à la phase = %g pi-rads\n",OPT[1],OPT[0]/Pi);
+                       printf("Min: W = %g MeV à la phase = %g pi-rads\n",OPT[3],OPT[2]/Pi);
                break;
-               
-               break;
+               case 3: power_scan(); break;
                default: break;
           }// Fin du switch d'exécution                   
      }// Fin du while. Le programme y demeure tant que l'option 3 n'est pas choisie
+     free(OPT);
      return (0);
 }
 
@@ -166,19 +170,20 @@ void calculate_trajectory(void)
 }
 
 /******************************************************************************/
-double *Get_Optimums(double *phase, double *energy, int count)
-{
-     int i;
-     double *opt = (double*)calloc(4,sizeof(double));
-     opt[1] = energy[0];
-     opt[3] = energy[0];
-     for(i=count;i--;)
-     {
-         if(energy[i] > opt[1]) opt[0] = phase[i],opt[1] = energy[i];
-         if(energy[i] < opt[3]) opt[2] = phase[i],opt[3] = energy[i];
-     }
-     return opt;
-     free(opt);
+double *Get_Optimums(double *phase, double *energy, int count)
+
+{
+     int i;
+     double *opt = (double*)calloc(4,sizeof(double));
+     opt[1] = energy[0];
+     opt[3] = energy[0];
+     for(i=count;i--;)
+     {
+         if(energy[i] > opt[1]) opt[0] = phase[i],opt[1] = energy[i];
+         if(energy[i] < opt[3]) opt[2] = phase[i],opt[3] = energy[i];
+     }
+     return opt;
+     free(opt);
 }
 
 /******************************************************************************/
@@ -188,12 +193,14 @@ double *phase_scan(void)
      double *ystart;
      int nbad,nok;
      
+     char file[maxchar];
+     sprintf(file,"%sbalayage_phase_%e.dat",outputfolder,P);
+     
      clock_t t1,t2;
      t1 = clock();
      
      //Ouverture du fichier d'écriture des résultats
-     FILE *sortie = fopen(output2, "w");
-     FILE *log = fopen(output_log, "w");
+     FILE *sortie = fopen(file, "w");
 
      // Paramètres utilisés pour le balayage de la phase
      // NOTE IMPORTANTE : phase est une variable globale réservée!
@@ -210,6 +217,7 @@ double *phase_scan(void)
      yp=dmatrix(1,N,1,kmax);
 
      //Boucle de balayage sur la phase
+     printf("Puissance = %e W/cm^2, W0 = %g MeV\n",P,Wo);
      for(int st=0;st<=npt;st++)
      {
           // Sortie à l'écran de la progression du calcul
@@ -224,14 +232,6 @@ double *phase_scan(void)
 
           // Simulation
           odeint(ystart,N,x1,x2,eps,h1,hmin,&nok,&nbad,derivs,bsstep);
-
-          //Sortie du journal d'exécution
-          fprintf(log,"%d",st);
-          fprintf(log,"\n%s %13s %f\n","Phase:","  ",phase/Pi);
-          fprintf(log,"%s %13s %3d\n","successful steps:"," ",nok);
-          fprintf(log,"%s %8s %3d\n","bad steps (corrected):","",nbad);
-          fprintf(log,"%s %9s %3d\n","function evaluations:"," ",nrhs);
-          fprintf(log,"%s %3d\n\n","stored intermediate values:    ",kount);
                          
           // écriture du fichier de résultats
           energy_vec[st] = m_mev/sqrt(1-((yp[2][kount]*yp[2][kount])/(co*co)))-Wo;
@@ -244,22 +244,55 @@ double *phase_scan(void)
      free_dvector(ystart,1,N);
 
      //Fermeture des fichiers d'écriture       
-     fclose(log);
      fclose(sortie);
-                    
-     std::cout << "\n\nBalayage terminé, ";
+     
+     // Sortie à l'écran
      t2 = clock();
      clock_t tourshorloge = t2 - t1;
-     std::cout << " Temps d'exécution:"
+     std::cout << ", temps d'exécution : "
                <<  tourshorloge
                << " tours d\'horloge ("
                << (double)tourshorloge/CLOCKS_PER_SEC
                << " s)"
                << std::endl;
-     sleep(sleep_time);
-     return Get_Optimums(phase_vec,energy_vec,npt+1);
+     return Get_Optimums(phase_vec,energy_vec,npt+1);
      free(phase_vec);
      free(energy_vec);
+}
+
+/******************************************************************************/
+void power_scan(void)
+{    
+     double *OPT = (double*)calloc(4,sizeof(double));
+     const double pas = (Pfin - Pini)/Np;
+     const double WtoTW = 1.0e-12;
+     
+     /************* Fichier de sortie *****************************************/
+     char scanfile[maxchar];
+     sprintf(scanfile,"%sbalayage_puissance.dat",outputfolder);
+     FILE *sortie = fopen(scanfile,"w");
+     if(sortie==NULL) printf("N'a pu créer %s\n",scanfile),abort();
+     
+     for(int n = 0; n <= Np; n++)
+     {
+          P = Pini + n*pas;
+          Imax = 2.0*P/(Pi*exp(1.0)*wo*wo);
+          Eo = sqrt(2.0*120.0*Pi*Imax);
+          A = 0.371*lambda/wo*Eo;
+          
+          print_dashes();
+          printf("%d/%d\n",n,Np);
+          OPT = phase_scan();
+          puts("Valeurs optimales du balayage de la phase");
+          printf("Max: W = %g MeV à la phase = %g pi-rads\n",OPT[1],OPT[0]/Pi);
+          printf("Min: W = %g MeV à la phase = %g pi-rads\n",OPT[3],OPT[2]/Pi);
+          
+          //               1  2  3  4  5  6    1        2     3     4      5       6
+          fprintf(sortie,"%e %e %e %e %e %e\n",P*WtoTW,Imax,OPT[1],OPT[0],OPT[3],OPT[2]);
+     }
+     
+     fclose(sortie);
+     free(OPT);
 }
 
 /****************** End of file ***********************************************/
