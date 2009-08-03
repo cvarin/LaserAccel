@@ -217,7 +217,7 @@ double *phase_scan(void)
      yp=dmatrix(1,N,1,kmax);
 
      //Boucle de balayage sur la phase
-     printf("Puissance = %e W/cm^2, W0 = %g MeV\n",P,Wo);
+     printf("Puissance = %e W, W0 = %g MeV\n",P,Wo);
      for(int st=0;st<=npt;st++)
      {
           // Sortie à l'écran de la progression du calcul
@@ -265,7 +265,8 @@ void power_scan(void)
 {    
      double *OPT = (double*)calloc(4,sizeof(double));
      const double pas = (Pfin - Pini)/Np;
-     const double WtoTW = 1.0e-12;
+     const double Pnorm = 1.0e-12;
+     const double Inorm = 1.0e-22;
      
      /************* Fichier de sortie *****************************************/
      char scanfile[maxchar];
@@ -287,8 +288,8 @@ void power_scan(void)
           printf("Max: W = %g MeV à la phase = %g pi-rads\n",OPT[1],OPT[0]/Pi);
           printf("Min: W = %g MeV à la phase = %g pi-rads\n",OPT[3],OPT[2]/Pi);
           
-          //               1  2  3  4  5  6    1        2     3     4      5       6
-          fprintf(sortie,"%e %e %e %e %e %e\n",P*WtoTW,Imax,OPT[1],OPT[0],OPT[3],OPT[2]);
+          //               0  1  2  3  4  5    0        1     2     3      4       5
+          fprintf(sortie,"%e %e %e %e %e %e\n",P*Pnorm,Imax*Inorm,OPT[1],OPT[0],OPT[3],OPT[2]);
      }
      
      fclose(sortie);

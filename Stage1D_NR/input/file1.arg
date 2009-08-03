@@ -2,7 +2,7 @@
 Puissance (Watts) : 10.0e12
 Longueur d'onde (m) : 0.8e-6
 Position du foyer (m) : 1
-Dimension du faisceau au foyer (m) : 3e-6
+Dimension du faisceau au foyer (m) : 5.0e-6
 Largeur de l'impulsion (multiple de la periode) : 3.75
 Phase (x Pi rads) : 1.59
 
@@ -15,8 +15,8 @@ Point de rencontre (zR) : 0.0
 
 # Paramètres du scan d'intensité
 Puissance initiale (Watts) : 0.0
-Puissance finale (Watts) : 300.0e12
-Nombre de points : 100
+Puissance finale (Watts) : 500.0e12
+Nombre de points : 300
 
 # Paramètres de l'intégrateur
 Precision (eps) : 1.0e-10
