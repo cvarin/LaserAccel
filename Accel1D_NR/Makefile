@@ -1,12 +1,10 @@
 # Project: Accel1D
 # Makefile created by Dev-C++ 4.9.9.2
 
-CPP  = g++.exe
-CC   = gcc.exe
-WINDRES = windres.exe
-RES  = 
-OBJ  = Main.o rkqs_double.o initialize.o notes.o nrutil.o odeint_double.o rkck_double.o pzextr_double.o bsstep_double.o mmid_double.o $(RES)
-LINKOBJ  = Main.o rkqs_double.o initialize.o notes.o nrutil.o odeint_double.o rkck_double.o pzextr_double.o bsstep_double.o mmid_double.o $(RES)
+CPP  = g++
+CC   = gcc
+OBJ  = Main.o rkqs_double.o initialize.o notes.o nrutil.o odeint_double.o rkck_double.o pzextr_double.o bsstep_double.o mmid_double.o
+LINKOBJ  = Main.o rkqs_double.o initialize.o notes.o nrutil.o odeint_double.o rkck_double.o pzextr_double.o bsstep_double.o mmid_double.o
 LIBS =   
 INCS = 
 CXXINCS = 

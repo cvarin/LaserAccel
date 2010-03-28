@@ -95,8 +95,7 @@ int main(void)
           std::cout << std::endl;
           
           zini=position*z_rayleigh;  // Position initiale de l'électron [m]
-          zpo=-4*co*T;               // Position initiale de l'impulsion [m] 
-          
+	  zpo=-0.0*co*T;               // Position initiale de l'impulsion [m] 	  //zpo=zf;        
           break;
         /**********************************************************************/          
         default: 
