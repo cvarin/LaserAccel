@@ -1,23 +1,24 @@
-/*
-  Name: main.c
-  Author: Charles Varin
-  Date: 07-12-05 21:56
-  Description: Simulation des équations du mouvement d'un électron sur l'axe de 
+/*******************************************************************************
+  Description: Simulation des Ã©quations du mouvement d'un Ã©lectron sur l'axe de 
   propagation d'une impulsion TM01 (1-D).
-  Tout est en unité MKS.
-*/
-
-#include <iostream>  
+  Tout est en unitÃ© MKS.
+*******************************************************************************/
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
 #include <string>
-#include <cstdlib>
 
-// Les en-têtes du programme sont appellées ici
-#include "MainHeader.h"
+#include "constants.h"
+#include "derivs.h"
+#include "initialize.h"
+#include "nrode.h"
+#include "notes.h"
 
-// Nombre d'équations à résoudre (une pour z + une pour vz = 2)
+// Nombre d'Ã©quations Ã  rÃ©soudre (une pour z + une pour vz = 2)
 #define N 2              
 
-/*************** Déclaration des variables globales ***************************/
+/*************** DÃ©claration des variables globales ***************************/
 double Wo,vo,zini;
 double P,Imax,lambda,zf,wo,dT,zpo;
 double ka,omega,z_rayleigh,Eo,A,T;
@@ -44,28 +45,28 @@ int main(void)
  int option;
  float position;
  
- // Paramètres utilisés pour le balayage de la phase
+ // ParamÃ¨tres utilisÃ©s pour le balayage de la phase
  float phasei = 0.0;
  float phasef = 2.0;
  unsigned int npt = 100;
  
- // Paramètre utilisé par la fonction odeint du Numerical Recipes
+ // ParamÃ¨tre utilisÃ© par la fonction odeint du Numerical Recipes
  kmax=200000;
  dxsav=(x2-x1)/1e2;
  
- // Paramètres de normalisation du temps et de la position de l'électron
+ // ParamÃ¨tres de normalisation du temps et de la position de l'Ã©lectron
  float t_norm = 1e12; // 1e12 = Temps en picosecondes
- float z_norm = 1e3;  // 1e3 = Position en millimètres
- // Note : l'énergie écrite dans les fichiers est toujours en MeV
+ float z_norm = 1e3;  // 1e3 = Position en millimÃ¨tres
+ // Note : l'Ã©nergie Ã©crite dans les fichiers est toujours en MeV
  
  while(option!=3)
  {
-  /********* Initialisation de l'écran (vider l'écran) ************************/
+  /********* Initialisation de l'Ã©cran (vider l'Ã©cran) ************************/
   int r;
-  r = system("clear"); // Si ça ne fonctionne pas, essayer system("cls");
+  r = system("clear"); // Si Ã§a ne fonctionne pas, essayer system("cls");
   /****************************************************************************/
   
-  /*************** Options affichées à l'écran ********************************/
+  /*************** Options affichÃ©es Ã  l'Ã©cran ********************************/
   std::cout << "\nOptions possibles:\n\n"
             << "1. Trajectoire\n"
             << "2. Balayage de la phase\n" 
@@ -82,21 +83,22 @@ int main(void)
      switch(option)
       {case 1: case 2:     
        /***********************************************************************/
-       /* Les paramètres de la simulations sont spécifiés dans les fichiers   */
+       /* Les paramÃ¨tres de la simulations sont spÃ©cifiÃ©s dans les fichiers   */
        /* se terminant par l'extension .arg                                   */
        /***********************************************************************/
           initialize(faisceau);      
           initialize(integrateur);
     
           
-          std::cout << "Position initiale de l'électron (en unités de zR)";
+          std::cout << "Position initiale de l'Ã©lectron (en unitÃ©s de zR)";
           std::cout << std::endl;
-          std::cout << "(valeur précédente:" << position << "):";
+          std::cout << "(valeur prÃ©cÃ©dente:" << position << "):";
           std::cin  >> position;
           std::cout << std::endl;
           
-          zini=position*z_rayleigh;  // Position initiale de l'électron [m]
-	  zpo=-0.0*co*T;               // Position initiale de l'impulsion [m] 	  //zpo=zf;        
+          zini=position*z_rayleigh;  // Position initiale de l'Ã©lectron [m]
+	  zpo=-0.0*co*T;               // Position initiale de l'impulsion [m] 
+	  //zpo=zf;        
           break;
         /**********************************************************************/          
         default: 
@@ -105,45 +107,45 @@ int main(void)
     }
   
   /****************************************************************************/               
-  /*********** Selon l'option choisie, exécution ******************************/
+  /*********** Selon l'option choisie, exÃ©cution ******************************/
   /****************************************************************************/
   switch(option)
    {                       
-    case 1:// Détail de la simulation pour une trajectoire
+    case 1:// DÃ©tail de la simulation pour une trajectoire
            nrhs=0;
                      
-           // Allocation de la mémoire
+           // Allocation de la mÃ©moire
            ystart=dvector(1,N);
            xp=dvector(1,kmax);
            yp=dmatrix(1,N,1,kmax);
                      
-           // Conditions initiales de l'électron
+           // Conditions initiales de l'Ã©lectron
            ystart[1]=zf+zini;//Position initiale
            ystart[2]=0.0;    //Vitesse initiale
            Wo = m_mev/sqrt(1-pow(ystart[2]/co,2));
            
-           phase = phaseo*Pi; // Phase de l'impulsion à l'étranglement
+           phase = phaseo*Pi; // Phase de l'impulsion Ã  l'Ã©tranglement
           
            // Simulation
-           odeint(ystart,N,x1,x2,eps,h1,hmin,&nok,&nbad,derivs,rkqs);
+           odeint(ystart,N,x1,x2,eps,h1,hmin,&nok,&nbad,TM01_paraxial,rkqs);
 
-           // Diagnostique à l'écran
+           // Diagnostique Ã  l'Ã©cran
            printf("%s %13s %3d\n","successful steps:"," ",nok);
            printf("%s %8s %3d\n","bad steps (corrected):"," ",nbad);
            printf("%s %9s %3d\n","function evaluations:"," ",nrhs);
            printf("%s %3d\n\n","stored intermediate values:    ",kount);
            
            /*******************************************************************/          
-           /* Écriture du fichier des résultats                               */
+           /* Ã‰criture du fichier des rÃ©sultats                               */
            /*******************************************************************/             
            sortie = fopen("./output/trajectoire.dat", "w");
-           // Premier point (à t = 0).
+           // Premier point (Ã  t = 0).
            fprintf(sortie, "%.12f %.12f %.12f \n",
                            x1*t_norm,        // Temps
                            zini*z_norm,      // Position
-                           Wo-m_mev          // Énergie
+                           Wo-m_mev          // Ã‰nergie
                    );    
-           // Points subséquents
+           // Points subsÃ©quents
            for (i=1;i<=kount;i++)
                {
                 fprintf(sortie, "%.12f %.12f %.12f\n",
@@ -154,10 +156,10 @@ int main(void)
                }
            fclose(sortie);
            
-           // Écriture du fichier de notes
+           // Ã‰criture du fichier de notes
            notes();
 
-           // Désallocation de la mémoire
+           // DÃ©sallocation de la mÃ©moire
            free_dmatrix(yp,1,N,1,kmax);
            free_dvector(xp,1,kmax);
            free_dvector(ystart,1,N);
@@ -165,22 +167,22 @@ int main(void)
            break;
     
          
-    case 2:// Détail de la simulation pour un balayage de la phase
+    case 2:// DÃ©tail de la simulation pour un balayage de la phase
            nrhs=0;
                      
-           //Ouverture du fichier d'écriture des résultats
+           //Ouverture du fichier d'Ã©criture des rÃ©sultats
            sortie = fopen("./output/balayage.dat", "w");
            log = fopen("./output/balayage.log", "w");
                      
            //Boucle de balayage sur la phase
            for(unsigned int st=0;st<=npt;st++)
               {
-               // Allocation de la mémoire
+               // Allocation de la mÃ©moire
                ystart=dvector(1,N);
                xp=dvector(1,kmax);
                yp=dmatrix(1,N,1,kmax);
     
-               // Sortie à l'écran de la progression du calcul
+               // Sortie Ã  l'Ã©cran de la progression du calcul
                std::cerr << "\r" << st << "%";
                              
                // Conditions initiales
@@ -189,13 +191,13 @@ int main(void)
                
                Wo = m_mev/sqrt(1-pow(ystart[2]/co,2));
     
-               // Phase de l'impulsion à l'étranglement
+               // Phase de l'impulsion Ã  l'Ã©tranglement
                phase = (phasei + (phasef - phasei)*st/npt)*Pi; 
     
                // Simulation
-               odeint(ystart,N,x1,x2,eps,h1,hmin,&nok,&nbad,derivs,bsstep);
+               odeint(ystart,N,x1,x2,eps,h1,hmin,&nok,&nbad,TM01_paraxial,bsstep);
     
-               //Sortie du journal d'exécution
+               //Sortie du journal d'exÃ©cution
                fprintf(log,"%d",st);
                fprintf(log,"\n%s %13s %f\n","Phase:","  ",phase/Pi);
                fprintf(log,"%s %13s %3d\n","successful steps:"," ",nok);
@@ -203,7 +205,7 @@ int main(void)
                fprintf(log,"%s %9s %3d\n","function evaluations:"," ",nrhs);
                fprintf(log,"%s %3d\n\n","stored intermediate values:    ",kount);
                              
-               //Écriture du fichier de résultats
+               //Ã‰criture du fichier de rÃ©sultats
                fprintf(sortie, "%.12f %.12f \n", phase/Pi, 
                m_mev/sqrt( 1-pow(yp[2][kount]/co,2)) - Wo );
                              
@@ -214,17 +216,17 @@ int main(void)
                free_dvector(ystart,1,N);
               } // Fin de la boucle de balayage
               
-           //Fermeture des fichiers d'écriture       
+           //Fermeture des fichiers d'Ã©criture       
            fclose(log);
            fclose(sortie);
                             
-           std::cout << "\n\nBalayage terminé" << std::endl;
+           std::cout << "\n\nBalayage terminÃ©" << std::endl;
            sleep(sleep_time);
            break;
                             
     default: 
            break;
-   }// Fin du switch d'exécution                   
+   }// Fin du switch d'exÃ©cution                   
  }// Fin du while. Le programme y demeure tant que l'option 3 n'est pas choisie
  return (0);
 }

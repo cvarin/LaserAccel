@@ -1,4 +1,6 @@
-#include "MainHeader.h"
+#include <stdio.h>
+
+#include "constants.h"
 
 extern double Wo,vo,zini;
 extern double P,Imax,lambda,zf,wo,dT,zpo;
@@ -19,21 +21,21 @@ void notes(){
     
     sortie = fopen("./output/notes.txt", "w");
 
-    fprintf(sortie, "\nParamètres du faisceau\n\n");
+    fprintf(sortie, "\nParamÃ¨tres du faisceau\n\n");
     fprintf(sortie, "Puissance : %g W\n", P);
-    fprintf(sortie, "Intensité : %g W/cm^2\n", Imax/(100*100));
+    fprintf(sortie, "IntensitÃ© : %g W/cm^2\n", Imax/(100*100));
     fprintf(sortie, "Longueur d'onde : %g microns\n", lambda*1e6);
     fprintf(sortie, "Dimension du faisceau au foyer : %g microns\n", wo*1e6);
-    fprintf(sortie, "Durée de l'impulsion (fs) : %g fs\n", T*1e15);
+    fprintf(sortie, "DurÃ©e de l'impulsion (fs) : %g fs\n", T*1e15);
     fprintf(sortie, "Phase de l'impulsion au foyer (pour trajectoire) : %g Pi rads\n", phaseo);            
     fprintf(sortie, "\nPosition du foyer : %g m\n", zf);
-    fprintf(sortie, "Fréquence angulaire : %g rad/fs\n", omega/1e15);    
+    fprintf(sortie, "FrÃ©quence angulaire : %g rad/fs\n", omega/1e15);    
     fprintf(sortie, "Largeur de l'impulsion (multiple de 2*Pi/omega) : %g\n", dT);    
     fprintf(sortie, "Largeur de l'impulsion (multiple de zR) : %g\n", T*co/z_rayleigh);
-    fprintf(sortie, "Position initiale de l'impulsion (unités de zR) : %g\n", zpo/z_rayleigh);
+    fprintf(sortie, "Position initiale de l'impulsion (unitÃ©s de zR) : %g\n", zpo/z_rayleigh);
     fprintf(sortie, "Distance de Rayleigh (zR) : %g microns\n", z_rayleigh*1e6);
     
-    fprintf(sortie, "\n\nParamètres de la particule\n\n");
+    fprintf(sortie, "\n\nParamÃ¨tres de la particule\n\n");
     fprintf(sortie, "Energie initiale : %g MeV\n", Wo);
     fprintf(sortie, "Vitesse initiale (v/c): %g\n", vo/co);
     fprintf(sortie, "Position initiale (unite de zR): %g\n", zini/z_rayleigh);
@@ -41,7 +43,7 @@ void notes(){
     fprintf(sortie, "Charge (coulombs) : %g\n", q);
     fprintf(sortie, "Masse (kg) : %g\n", m);
          
-    fprintf(sortie, "\n\nParamètres de l'intégrateur\n\n");
+    fprintf(sortie, "\n\nParamÃ¨tres de l'intÃ©grateur\n\n");
     fprintf(sortie, "Precision (eps) : %g\n", eps);
     fprintf(sortie, "Pas de depart (h1) : %g\n", h1);
     fprintf(sortie, "Pas minimal permis (hmin) : %g\n", hmin);
