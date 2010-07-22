@@ -1,0 +1,6 @@
+Precision (eps) : 1.0e-10
+Pas de depart (h1) : 1.0e-12
+Pas minimal permis (hmin) : 0.0
+Temps initial (x1, secondes) : 0.0
+Temps final (x2, secondes) : 15.0e-12
+                 
