@@ -2,12 +2,15 @@
 BIN  = Accel1D.exe
 BUILD_DIR = ./build
 DATA_DIR  = ./output
-SRC_DIR   = ./src
+SRC_DIR   = ./src ./src/nr
+
 ################### Fetch names ################################################
-SRC   = $(wildcard $(SRC_DIR)/*.c)
+VPATH = $(SRC_DIR)
+SRC   = $(foreach DIR, $(SRC_DIR), $(wildcard $(DIR)/*.c))
+HEADS = $(foreach DIR, $(SRC_DIR), $(wildcard $(DIR)/*.h))
+INCLUDES = $(addprefix -I./, $(SRC_DIR) . )
 xnames = $(notdir $(SRC))
 NAMES = $(subst .c,,$(xnames))
-HEADS = $(wildcard $(SRC_DIR)/*.h)
 OBJS  = $(addsuffix .o, $(NAMES))
 LINKS = $(addprefix $(BUILD_DIR)/,$(OBJS))
 DATA  = $(wildcard $(DATA_DIR)/*)
@@ -22,10 +25,12 @@ RM    = rm -fr
 all: $(BIN)
 
 $(BIN): $(LINKS) $(HEADS)
-	$(CPP) $(LINKS) -o $(BIN) $(LIBS)
+	@echo "LINKING: $(CPP) $(OBJS) -o $(BIN)"
+	@$(CPP) $(LINKS) -o $(BIN)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADS)
-	$(CPP) $(FLAGS) -c $< -o $@
+$(BUILD_DIR)/%.o: %.c $(HEADS)
+	@echo "COMPILING: $(CPP) $(FLAGS) -c $< -o $@"
+	@$(CPP) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 ################### Run ########################################################
 .PHONY: r run
