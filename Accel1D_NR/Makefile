@@ -2,7 +2,7 @@
 BIN  = Accel1D.exe
 BUILD_DIR = ./build
 DATA_DIR  = ./output
-SRC_DIR   = ./src ./src/nr
+SRC_DIR   = ./src ../NRODE
 
 ################### Fetch names ################################################
 VPATH = $(SRC_DIR)
