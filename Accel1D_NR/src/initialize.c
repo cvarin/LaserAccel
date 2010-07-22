@@ -52,12 +52,13 @@ void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
             printf("\nImpossible d\'ouvrir le fichier \'faisceau.arg\'\n\n");
             exit(1);}
         else{
-            fscanf(entree, "Puissance (Watts) : %lf", &P);
-            fscanf(entree, "\nLongueur d'onde (m) : %lf", &lambda);
-            fscanf(entree, "\n\nPosition du foyer (m) : %lf", &zf);
-            fscanf(entree, "\n\n\nDimension du faisceau au foyer (m) : %lf", &wo);
-            fscanf(entree, "\n\n\n\nLargeur de l'impulsion (fs) : %lf", &T);
-            fscanf(entree, "\n\n\n\n\nPhase (x Pi rads) : %lf", &phaseo);
+            int result;
+            result = fscanf(entree, "Puissance (Watts) : %lf", &P);
+            result = fscanf(entree, "\nLongueur d'onde (m) : %lf", &lambda);
+            result = fscanf(entree, "\n\nPosition du foyer (m) : %lf", &zf);
+            result = fscanf(entree, "\n\n\nDimension du faisceau au foyer (m) : %lf", &wo);
+            result = fscanf(entree, "\n\n\n\nLargeur de l'impulsion (fs) : %lf", &T);
+            result = fscanf(entree, "\n\n\n\n\nPhase (x Pi rads) : %lf", &phaseo);
             fclose(entree);
             }
             ka = 2*Pi/lambda;
@@ -75,11 +76,12 @@ void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
             printf("\nImpossible d\'ouvrir le fichier \'integrateur.arg\'\n\n");
             exit(1);}
         else{
-            fscanf(entree, "Precision (eps) : %lf", &eps);
-            fscanf(entree, "\nPas de depart (h1) : %lf", &h1);
-            fscanf(entree, "\n\nPas minimal permis (hmin) : %lf", &hmin);
-            fscanf(entree, "\n\n\nTemps initial (x1, secondes) : %lf", &x1);
-            fscanf(entree, "\n\n\n\nTemps final (x2, secondes) : %lf", &x2);
+	    int result;
+            result = fscanf(entree, "Precision (eps) : %lf", &eps);
+            result = fscanf(entree, "\nPas de depart (h1) : %lf", &h1);
+            result = fscanf(entree, "\n\nPas minimal permis (hmin) : %lf", &hmin);
+            result = fscanf(entree, "\n\n\nTemps initial (x1, secondes) : %lf", &x1);
+            result = fscanf(entree, "\n\n\n\nTemps final (x2, secondes) : %lf", &x2);
             fclose(entree);
             }
         break;

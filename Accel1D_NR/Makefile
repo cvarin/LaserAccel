@@ -17,7 +17,8 @@ DATA  = $(wildcard $(DATA_DIR)/*)
 
 ################### Commands ###################################################
 CPP   = g++
-FLAGS = -fPIC -O3 -Wall
+# FLAGS = -fPIC -O3 -Wall
+FLAGS = -O3
 # définir la macro NDEBUG pour supprimer les "assert()".
 RM    = rm -fr
 

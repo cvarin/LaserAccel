@@ -61,7 +61,8 @@ int main(void)
  while(option!=3)
  {
   /********* Initialisation de l'écran (vider l'écran) ************************/
-  system("clear"); // Si ça ne fonctionne pas, essayer system("cls");
+  int r;
+  r = system("clear"); // Si ça ne fonctionne pas, essayer system("cls");
   /****************************************************************************/
   
   /*************** Options affichées à l'écran ********************************/
@@ -172,7 +173,7 @@ int main(void)
            log = fopen("./output/balayage.log", "w");
                      
            //Boucle de balayage sur la phase
-           for(int st=0;st<=npt;st++)
+           for(unsigned int st=0;st<=npt;st++)
               {
                // Allocation de la mémoire
                ystart=dvector(1,N);
