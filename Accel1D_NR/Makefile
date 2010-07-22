@@ -5,7 +5,7 @@ DATA_DIR  = ./output
 SRC_DIR   = ./src
 ################### Fetch names ################################################
 SRC   = $(wildcard $(SRC_DIR)/*.c)
-xnames = $(subst $(SRC_DIR)/,,$(SRC))
+xnames = $(notdir $(SRC))
 NAMES = $(subst .c,,$(xnames))
 HEADS = $(wildcard $(SRC_DIR)/*.h)
 OBJS  = $(addsuffix .o, $(NAMES))
