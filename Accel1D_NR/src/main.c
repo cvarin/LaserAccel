@@ -21,7 +21,8 @@
 /*************** Déclaration des variables globales ***************************/
 double Wo,vo,zini;
 double P,Imax,lambda,zf,wo,dT,zpo;
-double ka,omega,z_rayleigh,Eo,A,T;
+double z_conf;
+double k,omega,z_rayleigh,Eo,A,T;
 double eps,h1,hmin,x1,x2;
 double phaseo;
 double dz,nz,tprime,impulsion,waist,gouy,coeff;

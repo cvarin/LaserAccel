@@ -10,7 +10,8 @@
 #include "constants.h"
 
 extern double P,Imax,lambda,zf,wo,dT;
-extern double ka,omega,z_rayleigh,Eo,A,T;
+extern double z_conf;
+extern double k,omega,z_rayleigh,Eo,A,T;
 extern double phaseo;
 extern double eps,h1,hmin,x1,x2;
 
@@ -33,14 +34,15 @@ void initialize(int n) /*Conditions initiales et paramètres d'intégration*/
             result = fscanf(entree, "\n\n\n\n\nPhase (x Pi rads) : %lf", &phaseo);
             fclose(entree);
             }
-            ka = 2*Pi/lambda;
-            omega = ka*co;
-            z_rayleigh = ka*(wo*wo)/2;
-            Imax = 2*P/(Pi*exp(1)*wo*wo);
-            Eo = sqrt(2*120*Pi*Imax);
+            k = 2.0*Pi/lambda;
+            omega = k*co;
+            z_rayleigh = k*(wo*wo)/2.0;
+            z_conf = z_rayleigh*sqrt(1.0+2.0/(k*z_rayleigh));
+            Imax = 2.0*P/(Pi*exp(1)*wo*wo);
+            Eo = sqrt(2.0*120.0*Pi*Imax);
             A = 0.371*lambda/wo*Eo;
             T *= 1.0e-15;      // Conversion de femtoseconde à seconde
-            dT = omega*T/2/Pi;
+            dT = omega*T/2.0/Pi;
         break;
 
     case 2:

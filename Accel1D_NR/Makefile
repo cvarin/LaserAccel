@@ -2,13 +2,13 @@
 BIN  = Accel1D.exe
 BUILD_DIR = ./build
 DATA_DIR  = ./output
-SRC_DIR   = ./src ../NRODE
+SRC_DIR   = ./src ../NRODE ../commons
 
 ################### Fetch names ################################################
 VPATH = $(SRC_DIR)
 SRC   = $(foreach DIR, $(SRC_DIR), $(wildcard $(DIR)/*.c))
 HEADS = $(foreach DIR, $(SRC_DIR), $(wildcard $(DIR)/*.h))
-INCLUDES = $(addprefix -I./, $(SRC_DIR) . )
+INCLUDES = $(addprefix -I./, $(SRC_DIR) .)
 xnames = $(notdir $(SRC))
 NAMES = $(subst .c,,$(xnames))
 OBJS  = $(addsuffix .o, $(NAMES))
@@ -19,7 +19,6 @@ DATA  = $(wildcard $(DATA_DIR)/*)
 CPP   = g++
 # FLAGS = -fPIC -O3 -Wall
 FLAGS = -O3
-# définir la macro NDEBUG pour supprimer les "assert()".
 RM    = rm -fr
 
 ################### Compiling and linking ######################################
@@ -27,7 +26,7 @@ all: $(BIN)
 
 $(BIN): $(LINKS) $(HEADS)
 	@echo "LINKING: $(CPP) $(OBJS) -o $(BIN)"
-	@$(CPP) $(LINKS) -o $(BIN)
+	@$(CPP) $(LINKS) $(INCLUDES) -o $(BIN)
 
 $(BUILD_DIR)/%.o: %.c $(HEADS)
 	@echo "COMPILING: $(CPP) $(FLAGS) -c $< -o $@"
@@ -43,7 +42,7 @@ run: $(BIN)
 .PHONY: clean c
 c: clean
 clean:
-	${RM} $(LINKS) $(BIN) $(DATA)
+	${RM} $(LINKS) $(BIN)
 
 .PHONY: clean_data cd
 cd: clean_data

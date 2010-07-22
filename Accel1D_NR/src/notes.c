@@ -4,7 +4,8 @@
 
 extern double Wo,vo,zini;
 extern double P,Imax,lambda,zf,wo,dT,zpo;
-extern double ka,omega,z_rayleigh,Eo,A,T;
+extern double z_conf;
+extern double k,omega,z_rayleigh,Eo,A,T;
 extern double eps,h1,hmin,x1,x2;
 extern double phaseo;
 extern double dz,nz,tprime,impulsion,waist,gouy,coeff;
@@ -34,6 +35,7 @@ void notes(){
     fprintf(sortie, "Largeur de l'impulsion (multiple de zR) : %g\n", T*co/z_rayleigh);
     fprintf(sortie, "Position initiale de l'impulsion (unités de zR) : %g\n", zpo/z_rayleigh);
     fprintf(sortie, "Distance de Rayleigh (zR) : %g microns\n", z_rayleigh*1e6);
+    fprintf(sortie, "Paramètre confocal normalizé (ka) : %g\n", z_conf*k);
     
     fprintf(sortie, "\n\nParamètres de la particule\n\n");
     fprintf(sortie, "Energie initiale : %g MeV\n", Wo);
