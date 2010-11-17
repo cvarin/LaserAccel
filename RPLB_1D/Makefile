@@ -1,5 +1,5 @@
 ################################################################################
-BIN  = stage1d.exe
+BIN  = prog.exe
 BUILD_DIR = ./build
 DATA_DIR  = ./output
 SRC_DIR   = ./src
