@@ -46,14 +46,19 @@ void derivs(double x,double y[],double dydx[])
     waist = 1/sqrt(1+(nz*nz));
     
     // Pulse 2
-    tprime2 = x - dz/co + zpo/co + d*zpo/co;
-    impulsion2 = exp(-(tprime2*tprime2)/(1000.0*T*T));
-    waist2 = 1/sqrt(1+(nz*nz)/(fac*fac));
+//     tprime2 = x - dz/co + zpo/co + d*zpo/co;
+//     impulsion2 = exp(-(tprime2*tprime2)/(1000.0*T*T));
+//     waist2 = 1/sqrt(1+(nz*nz)/(fac*fac));
+//     
+//     Ez1 = 2.0*A*(waist*waist)*impulsion*sin(omega*tprime+2*gouy-phase);
+// //     Ez2 = 2.0*A*(waist2*waist2)*impulsion2*sin(omega*tprime2+2*gouy+phase);
+//      Ez2 = 0.0;
+//     Ez = (Ez1+Ez2)/2.0;
     
-    Ez1 = 2.0*A*(waist*waist)*impulsion*sin(omega*tprime+2*gouy-phase);
-//     Ez2 = 2.0*A*(waist2*waist2)*impulsion2*sin(omega*tprime2+2*gouy+phase);
-     Ez2 = 0.0;
-    Ez = (Ez1+Ez2)/2.0;
+    double p_omega = 2*A*(waist*waist)*impulsion*sin(omega*tprime+2*gouy-phase);
+    double p_2omega = 2*A*(waist*waist)*impulsion*sin(2.0*omega*tprime+2*gouy-phase);
+    
+    Ez = p_omega + p_2omega;
     
     mag = sqrt(1-((y[2]*y[2])/(co*co)));
     dydx[1] = y[2];

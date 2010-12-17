@@ -1,8 +1,8 @@
 # Paramètres du faisceau
-Puissance (Watts) : 10.0e12
+Puissance (Watts) : 100.0e12
 Longueur d'onde (m) : 0.8e-6
 Position du foyer (m) : 1
-Dimension du faisceau au foyer (m) : 5.0e-6
+Dimension du faisceau au foyer (m) : 3.0e-6
 Largeur de l'impulsion (multiple de la periode) : 3.75
 Phase (x Pi rads) : 1.59
 

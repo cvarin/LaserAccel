@@ -206,7 +206,7 @@ double *phase_scan(void)
      // NOTE IMPORTANTE : phase est une variable globale réservée!
      const double phasei = 0.0;
      const double phasef = 2.0;
-     const int npt = 100;
+     const int npt = 500;
      
      double *phase_vec = (double*)calloc(npt+1,sizeof(double));
      double *energy_vec = (double*)calloc(npt+1,sizeof(double));
