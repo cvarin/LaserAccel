@@ -31,7 +31,10 @@ void TM01_paraxial(double x,double y[],double dydx[])
     waist = 1/sqrt(1+(nz*nz));
     gouy = atan(dz/z_rayleigh);
     
-    Ez = 2*A*(waist*waist)*impulsion*sin(omega*tprime+2*gouy-phase);
+    double p_omega = 2*A*(waist*waist)*impulsion*sin(omega*tprime+2*gouy-phase);
+    double p_2omega = 2*A*(waist*waist)*impulsion*sin(2.0*omega*tprime+2*gouy-phase);
+    
+    Ez = p_omega + p_2omega;
     
     mag = sqrt(1-((y[2]*y[2])/(co*co)));
     dydx[1] = y[2];

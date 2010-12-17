@@ -49,7 +49,7 @@ int main(void)
  // Paramètres utilisés pour le balayage de la phase
  float phasei = 0.0;
  float phasef = 2.0;
- unsigned int npt = 100;
+ unsigned int npt = 300;
  
  // Paramètre utilisé par la fonction odeint du Numerical Recipes
  kmax=200000;
