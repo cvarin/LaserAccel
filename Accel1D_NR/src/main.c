@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <unistd.h>
 
 #include "constants.h"
 #include "derivs.h"
