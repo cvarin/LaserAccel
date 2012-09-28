@@ -197,7 +197,7 @@ int main(void)
                phase = (phasei + (phasef - phasei)*st/npt)*Pi; 
     
                // Simulation
-               odeint(ystart,N,x1,x2,eps,h1,hmin,&nok,&nbad,TM01_paraxial,bsstep);
+               odeint(ystart,N,x1,x2,eps,h1,hmin,&nok,&nbad,TM01_paraxial,rkqs);
     
                //Sortie du journal d'exécution
                fprintf(log,"%d",st);
