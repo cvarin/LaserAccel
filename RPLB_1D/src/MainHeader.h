@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <unistd.h>
 
 #include "nrutil.h"  /*En-têtes des routines du NR*/
 
